@@ -17,19 +17,17 @@ func main() {
 	}
 }
 
-var chunk Chunk
-
 func Init() {
 	rl.InitWindow(screenX, screenY, "My game")
 	rl.SetTargetFPS(fps)
 	rl.DisableCursor()
 
-	chunk.xPos = 0
-	chunk.zPos = 0
-	chunk.Generate(noise)
+	genWorld()
 }
 
 func preDraw() {
+	// in rcamera.h
+	// #define CAMERA_MOVE_SPEED 21.6f // (initially 5.4f)
 	rl.UpdateCamera(&camera3D, rl.CameraFirstPerson)
 	rl.ClearBackground(rl.RayWhite)
 	if rl.IsKeyDown(rl.KeySpace) {
@@ -43,11 +41,7 @@ func preDraw() {
 }
 
 func draw3D() {
-	rl.DrawCube(Origin(), 1, 1, 1, rl.Yellow)
-	rl.DrawCubeWires(Origin(), 1, 1, 1, rl.Black)
-	rl.DrawGrid(100, 1)
-
-	chunk.Render()
+	renderWorld()
 }
 
 func draw2D() {
