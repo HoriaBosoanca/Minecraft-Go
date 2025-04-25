@@ -28,14 +28,7 @@ func Init() {
 func preDraw() {
 	rl.UpdateCamera(&camera3D, rl.CameraFirstPerson)
 	rl.ClearBackground(rl.RayWhite)
-	if rl.IsKeyDown(rl.KeySpace) {
-		camera3D.Position.Y += ascendSpeed
-		camera3D.Target.Y += ascendSpeed
-	}
-	if rl.IsKeyDown(rl.KeyLeftShift) {
-		camera3D.Position.Y -= ascendSpeed
-		camera3D.Target.Y -= ascendSpeed
-	}
+	move()
 }
 
 func draw3D() {
