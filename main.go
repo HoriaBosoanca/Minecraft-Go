@@ -26,8 +26,6 @@ func Init() {
 }
 
 func preDraw() {
-	// in rcamera.h
-	// #define CAMERA_MOVE_SPEED 21.6f // (initially 5.4f)
 	rl.UpdateCamera(&camera3D, rl.CameraFirstPerson)
 	rl.ClearBackground(rl.RayWhite)
 	if rl.IsKeyDown(rl.KeySpace) {
@@ -44,6 +42,4 @@ func draw3D() {
 	renderWorld()
 }
 
-func draw2D() {
-	canvasDrawText("My game", 5, 5, 20, rl.Black)
-}
+func draw2D() {}

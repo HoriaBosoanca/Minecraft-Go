@@ -24,7 +24,9 @@ func (chunk *Chunk) Generate(noise opensimplex.Noise) {
 			chunk.blocks[x][z] = make([]int8, chunkHeight)
 			for y := 0; y < chunkHeight; y++ {
 				ground := (noise.Eval2(float64(chunk.xPos*chunkSize+x)*crazyness, float64(chunk.zPos*chunkSize+z)*crazyness) + 1) / 2 * chunkHeight
-				if y < int(ground) {
+				if y == int(ground) {
+					chunk.blocks[x][z][y] = 2
+				} else if y < int(ground) {
 					chunk.blocks[x][z][y] = 1
 				} else {
 					chunk.blocks[x][z][y] = 0
@@ -38,15 +40,12 @@ func (chunk *Chunk) Render() {
 	for x, plane := range chunk.blocks {
 		for z, col := range plane {
 			for y, block := range col {
+				pos := rl.Vector3{X: float32(chunk.xPos*chunkSize + x), Y: float32(y), Z: float32(chunk.zPos*chunkSize + z)}
 				if block == 1 {
-					rl.DrawCube(
-						rl.Vector3{X: float32(chunk.xPos*chunkSize + x), Y: float32(y), Z: float32(chunk.zPos*chunkSize + z)},
-						1, 1, 1, rl.DarkGreen,
-					)
-					rl.DrawCubeWires(
-						rl.Vector3{X: float32(chunk.xPos*chunkSize + x), Y: float32(y), Z: float32(chunk.zPos*chunkSize + z)},
-						1, 1, 1, rl.Black,
-					)
+					drawCube(pos, rl.Brown)
+				}
+				if block == 2 {
+					drawCube(pos, rl.DarkGreen)
 				}
 			}
 		}

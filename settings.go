@@ -7,7 +7,7 @@ import (
 var fps int32 = 60
 
 var camera3D = rl.Camera{
-	Position:   rl.NewVector3(1.0, 32.0, 1.0),
+	Position:   rl.NewVector3(1.0, 60.0, 1.0),
 	Target:     rl.NewVector3(0.0, 0.0, 0.0),
 	Up:         rl.NewVector3(0.0, 1.0, 0.0),
 	Fovy:       45.0,
