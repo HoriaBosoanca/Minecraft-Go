@@ -7,7 +7,7 @@ import (
 
 var noise = opensimplex.New(time.Now().Unix())
 var chunks [][]Chunk
-var chunkCount int = 3
+var chunkCount = 4
 
 func genWorld() {
 	chunks = make([][]Chunk, chunkCount)

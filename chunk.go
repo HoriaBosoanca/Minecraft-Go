@@ -14,7 +14,7 @@ type Chunk struct {
 	blocks [][][]int8 // x z y
 }
 
-var crazyness float64 = 0.05
+var craziness = 0.05
 
 func (chunk *Chunk) Generate(noise opensimplex.Noise) {
 	chunk.blocks = make([][][]int8, chunkSize)
@@ -22,8 +22,8 @@ func (chunk *Chunk) Generate(noise opensimplex.Noise) {
 		chunk.blocks[x] = make([][]int8, chunkSize)
 		for z := 0; z < chunkSize; z++ {
 			chunk.blocks[x][z] = make([]int8, chunkHeight)
+			ground := (noise.Eval2(float64(chunk.xPos*chunkSize+x)*craziness, float64(chunk.zPos*chunkSize+z)*craziness) + 1) / 2 * chunkHeight
 			for y := 0; y < chunkHeight; y++ {
-				ground := (noise.Eval2(float64(chunk.xPos*chunkSize+x)*crazyness, float64(chunk.zPos*chunkSize+z)*crazyness) + 1) / 2 * chunkHeight
 				if y == int(ground) {
 					chunk.blocks[x][z][y] = 2
 				} else if y < int(ground) {
