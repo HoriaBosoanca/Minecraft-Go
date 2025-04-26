@@ -7,13 +7,13 @@ import (
 
 var noise = opensimplex.New(time.Now().Unix())
 var chunks [][]Chunk
-var chunkCount = 4
+var sqrtChunkCount = 9
 
 func genWorld() {
-	chunks = make([][]Chunk, chunkCount)
-	for x := 0; x < chunkCount; x++ {
-		chunks[x] = make([]Chunk, chunkCount)
-		for z := 0; z < chunkCount; z++ {
+	chunks = make([][]Chunk, sqrtChunkCount)
+	for x := 0; x < sqrtChunkCount; x++ {
+		chunks[x] = make([]Chunk, sqrtChunkCount)
+		for z := 0; z < sqrtChunkCount; z++ {
 			chunks[x][z].xPos = x
 			chunks[x][z].zPos = z
 			chunks[x][z].Generate(noise)
@@ -21,10 +21,15 @@ func genWorld() {
 	}
 }
 
-func renderWorld() {
+func renderWorld(renderDistance int) {
 	for _, chunkLine := range chunks {
 		for _, chunk := range chunkLine {
-			chunk.Render()
+			if chunk.xPos-int(camera3D.Position.X)/16 <= renderDistance &&
+				chunk.xPos-int(camera3D.Position.X)/16 >= -renderDistance &&
+				chunk.zPos-int(camera3D.Position.Z)/16 <= renderDistance &&
+				chunk.zPos-int(camera3D.Position.Z)/16 >= -renderDistance {
+				chunk.Render()
+			}
 		}
 	}
 }

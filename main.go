@@ -32,7 +32,7 @@ func preDraw() {
 }
 
 func draw3D() {
-	renderWorld()
+	renderWorld(RENDER_DISTANCE)
 }
 
 func draw2D() {}
