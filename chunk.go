@@ -25,13 +25,13 @@ func (chunk *Chunk) Generate(noise opensimplex.Noise) {
 			ground := (noise.Eval2(float64(chunk.xPos*chunkSize+x)*craziness, float64(chunk.zPos*chunkSize+z)*craziness) + 1) / 2 * chunkHeight
 			for y := 0; y < chunkHeight; y++ {
 				if y == int(ground) {
-					chunk.blocks[x][z][y] = 1 // grass
+					chunk.blocks[x][z][y] = GrassBlock
 				} else if y < int(ground) && y >= int(ground-5) {
-					chunk.blocks[x][z][y] = 2 // dirt
+					chunk.blocks[x][z][y] = DirtBlock
 				} else if y < int(ground) {
-					chunk.blocks[x][z][y] = 3 // stone
+					chunk.blocks[x][z][y] = StoneBlock
 				} else {
-					chunk.blocks[x][z][y] = 0 // air
+					chunk.blocks[x][z][y] = AirBlock
 				}
 			}
 		}
@@ -44,11 +44,13 @@ func (chunk *Chunk) Render() {
 			for y, block := range col {
 				pos := rl.Vector3{X: float32(chunk.xPos*chunkSize + x), Y: float32(y), Z: float32(chunk.zPos*chunkSize + z)}
 				switch block {
-				case 1:
+				case AirBlock:
+					continue
+				case GrassBlock:
 					drawCube(pos, rl.DarkGreen)
-				case 2:
+				case DirtBlock:
 					drawCube(pos, rl.Brown)
-				case 3:
+				case StoneBlock:
 					drawCube(pos, rl.Gray)
 				}
 			}
