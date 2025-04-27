@@ -32,7 +32,6 @@ const RENDER_DISTANCE = 1
 
 func renderWorld(renderDistance int) {
 	for coords, chunk := range chunks {
-		``
 		if coords.X-int(camera3D.Position.X)/16 <= renderDistance &&
 			coords.X-int(camera3D.Position.X)/16 >= -renderDistance &&
 			coords.Z-int(camera3D.Position.Z)/16 <= renderDistance &&
