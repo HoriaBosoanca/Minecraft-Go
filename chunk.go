@@ -12,7 +12,7 @@ type Chunk struct {
 	blocks [][][]int8 // x z y
 }
 
-var craziness = 0.05
+const craziness = 0.05
 
 func (chunk *Chunk) Generate(noise opensimplex.Noise, xChunkPos, zChunkPos int) {
 	chunk.blocks = make([][][]int8, CHUNK_SIZE)

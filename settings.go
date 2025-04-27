@@ -4,6 +4,9 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
+var screenX int32 = 960
+var screenY int32 = 540
+
 var fps int32 = 60
 
 var camera3D = rl.Camera{
@@ -13,6 +16,3 @@ var camera3D = rl.Camera{
 	Fovy:       90.0,
 	Projection: rl.CameraPerspective,
 }
-
-var screenX int32 = 960
-var screenY int32 = 540
