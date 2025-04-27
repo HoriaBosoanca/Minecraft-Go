@@ -20,13 +20,9 @@ func genWorld() {
 	chunks = make(map[ChunkPos]*Chunk, WORLD_SIZE)
 	for x := -WORLD_SIZE; x < WORLD_SIZE; x++ {
 		for z := -WORLD_SIZE; z < WORLD_SIZE; z++ {
-			if chunk, exists := chunks[ChunkPos{X: x, Z: z}]; exists {
-				chunk.Generate(noise)
-			} else {
-				chunk := &Chunk{xPos: x, zPos: z}
-				chunk.Generate(noise)
-				chunks[ChunkPos{X: x, Z: z}] = chunk
-			}
+			chunk := &Chunk{}
+			chunk.Generate(noise, x, z)
+			chunks[ChunkPos{X: x, Z: z}] = chunk
 		}
 	}
 }
@@ -35,12 +31,12 @@ func genWorld() {
 const RENDER_DISTANCE = 1
 
 func renderWorld(renderDistance int) {
-	for _, chunk := range chunks {
-		if chunk.xPos-int(camera3D.Position.X)/16 <= renderDistance &&
-			chunk.xPos-int(camera3D.Position.X)/16 >= -renderDistance &&
-			chunk.zPos-int(camera3D.Position.Z)/16 <= renderDistance &&
-			chunk.zPos-int(camera3D.Position.Z)/16 >= -renderDistance {
-			chunk.Render()
+	for coords, chunk := range chunks {
+		if coords.X-int(camera3D.Position.X)/16 <= renderDistance &&
+			coords.X-int(camera3D.Position.X)/16 >= -renderDistance &&
+			coords.Z-int(camera3D.Position.Z)/16 <= renderDistance &&
+			coords.Z-int(camera3D.Position.Z)/16 >= -renderDistance {
+			chunk.Render(coords.X, coords.Z)
 		}
 	}
 }
