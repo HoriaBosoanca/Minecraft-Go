@@ -16,6 +16,3 @@ var camera3D = rl.Camera{
 
 var screenX int32 = 960
 var screenY int32 = 540
-
-// the amount of chunks loaded is (2*RENDER_DISTANCE+1)^2
-const RENDER_DISTANCE = 1
