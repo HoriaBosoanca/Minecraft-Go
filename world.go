@@ -1,6 +1,7 @@
 package main
 
 import (
+	rl "github.com/gen2brain/raylib-go/raylib"
 	"github.com/ojrac/opensimplex-go"
 	"time"
 )
@@ -39,4 +40,5 @@ func renderWorld(renderDistance int) {
 			chunk.Render(coords.X, coords.Z)
 		}
 	}
+	rl.DrawGrid(2*WORLD_SIZE, 16)
 }

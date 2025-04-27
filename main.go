@@ -35,4 +35,6 @@ func draw3D() {
 	renderWorld(RENDER_DISTANCE)
 }
 
-func draw2D() {}
+func draw2D() {
+	displayCoords()
+}
