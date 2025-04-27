@@ -2,14 +2,14 @@ package main
 
 import rl "github.com/gen2brain/raylib-go/raylib"
 
-const moveSpeed float32 = 1
-const ascendSpeed float32 = 1
+const MOVE_SPEED float32 = 1
+const ASCEND_SPEED float32 = 1
 
 func move() {
 	deltaX := rl.Vector3Subtract(camera3D.Target, camera3D.Position)
 	deltaX.Y = 0
 	deltaX = rl.Vector3Normalize(deltaX)
-	deltaX = rl.Vector3Scale(deltaX, moveSpeed)
+	deltaX = rl.Vector3Scale(deltaX, MOVE_SPEED)
 	deltaZ := rl.NewVector3(deltaX.Z, 0, -deltaX.X)
 
 	if rl.IsKeyDown(rl.KeyW) {
@@ -30,11 +30,11 @@ func move() {
 	}
 
 	if rl.IsKeyDown(rl.KeySpace) {
-		camera3D.Position.Y += ascendSpeed
-		camera3D.Target.Y += ascendSpeed
+		camera3D.Position.Y += ASCEND_SPEED
+		camera3D.Target.Y += ASCEND_SPEED
 	}
 	if rl.IsKeyDown(rl.KeyLeftShift) {
-		camera3D.Position.Y -= ascendSpeed
-		camera3D.Target.Y -= ascendSpeed
+		camera3D.Position.Y -= ASCEND_SPEED
+		camera3D.Target.Y -= ASCEND_SPEED
 	}
 }

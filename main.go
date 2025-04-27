@@ -37,4 +37,5 @@ func draw3D() {
 
 func draw2D() {
 	displayCoords()
+	displayFPS()
 }
