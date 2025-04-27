@@ -41,17 +41,48 @@ func (chunk *Chunk) Render(xChunkPos, zChunkPos int) {
 		for z, col := range plane {
 			for y, block := range col {
 				pos := rl.Vector3{X: float32(xChunkPos*CHUNK_SIZE + x), Y: float32(y), Z: float32(zChunkPos*CHUNK_SIZE + z)}
-				switch block {
-				case AirBlock:
+				if block == AirBlock {
 					continue
+				}
+				if chunk.isBlockSurrounded(x, y, z) {
+					continue
+				}
+				switch block {
 				case GrassBlock:
 					drawCube(pos, rl.DarkGreen)
 				case DirtBlock:
 					drawCube(pos, rl.Brown)
 				case StoneBlock:
 					drawCube(pos, rl.Gray)
+				default:
+					continue
 				}
 			}
 		}
 	}
+}
+
+func (chunk *Chunk) isBlockSurrounded(xPos, yPos, zPos int) bool {
+	if xPos == 0 || xPos == CHUNK_SIZE-1 || yPos == 0 || yPos == CHUNK_HEIGHT-1 || zPos == 0 || zPos == CHUNK_SIZE-1 {
+		return false
+	}
+	if chunk.blocks[xPos-1][zPos][yPos] == AirBlock {
+		return false
+	}
+	if chunk.blocks[xPos+1][zPos][yPos] == AirBlock {
+		return false
+	}
+	if chunk.blocks[xPos][zPos][yPos-1] == AirBlock {
+		return false
+	}
+	if chunk.blocks[xPos][zPos][yPos+1] == AirBlock {
+		return false
+	}
+	if chunk.blocks[xPos][zPos-1][yPos] == AirBlock {
+		return false
+	}
+	if chunk.blocks[xPos][zPos+1][yPos] == AirBlock {
+		return false
+	}
+	return true
 }

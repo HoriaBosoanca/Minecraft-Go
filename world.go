@@ -29,7 +29,7 @@ func genWorld() {
 }
 
 // the amount of chunks loaded is (2*RENDER_DISTANCE+1)^2
-const RENDER_DISTANCE = 1
+const RENDER_DISTANCE = 3
 
 func renderWorld(renderDistance int) {
 	for coords, chunk := range chunks {
