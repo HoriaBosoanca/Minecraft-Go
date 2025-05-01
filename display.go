@@ -9,7 +9,8 @@ func displayCoords() {
 	pos := camera3D.Position
 	canvasDrawText(fmt.Sprintf("Coordinates:\nX: %f, Y: %f, Z: %f", pos.X, pos.Y, pos.Z),
 		5.0, 5.0, 20.0, rl.Black)
-	canvasDrawText(fmt.Sprintf("Chunk positions:\nX: %d, Z: %d", int(pos.X/16), int(pos.Z/16)),
+	chunkPos := worldToChunkPos(int(pos.X), int(pos.Z))
+	canvasDrawText(fmt.Sprintf("Chunk positions:\nX: %d, Z: %d", chunkPos.X, chunkPos.Z),
 		5.0, 20.0, 20.0, rl.Black)
 }
 
