@@ -6,10 +6,11 @@ import (
 )
 
 func displayCoords() {
-	pos := camera3D.Position
-	canvasDrawText(fmt.Sprintf("Coordinates:\nX: %f, Y: %f, Z: %f", pos.X, pos.Y, pos.Z),
+	camPos := camera3D.Position
+	camWorldPos := Position{X: int(camPos.X), Z: int(camPos.Z)}
+	canvasDrawText(fmt.Sprintf("Coordinates:\nX: %d, Y: %d, Z: %d", camWorldPos.X, int(camPos.Y), camWorldPos.Z),
 		5.0, 5.0, 20.0, rl.Black)
-	chunkPos := worldToChunkPos(int(pos.X), int(pos.Z))
+	chunkPos := camWorldPos.worldToChunkPos()
 	canvasDrawText(fmt.Sprintf("Chunk positions:\nX: %d, Z: %d", chunkPos.X, chunkPos.Z),
 		5.0, 20.0, 20.0, rl.Black)
 }
