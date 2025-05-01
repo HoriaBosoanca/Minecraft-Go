@@ -9,7 +9,7 @@ import (
 var world map[Position]*Chunk
 var noise = opensimplex.New(time.Now().Unix())
 
-// actual number of world is (2*WORLD_SIZE)^2
+// actual number of chunks is (2*WORLD_SIZE+1)^2
 const WORLD_SIZE = 10
 
 func genWorld() {
@@ -23,7 +23,7 @@ func genWorld() {
 	}
 }
 
-// the amount of world loaded is (2*RENDER_DISTANCE+1)^2
+// the amount of chunks loaded is (2*RENDER_DISTANCE+1)^2
 const RENDER_DISTANCE = 3
 
 func renderWorld(renderDistance int) {
