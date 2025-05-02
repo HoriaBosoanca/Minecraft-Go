@@ -19,6 +19,7 @@ func main() {
 
 func Init() {
 	rl.InitWindow(screenX, screenY, "My game")
+	loadModels()
 	rl.SetTargetFPS(fps)
 	rl.DisableCursor()
 
