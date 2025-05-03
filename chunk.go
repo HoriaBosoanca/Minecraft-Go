@@ -6,7 +6,7 @@ import (
 	"github.com/ojrac/opensimplex-go"
 )
 
-const CHUNK_SIZE = 8
+const CHUNK_SIZE = 16
 const CHUNK_HEIGHT = 32
 
 type Chunk struct {
