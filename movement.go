@@ -2,8 +2,8 @@ package main
 
 import rl "github.com/gen2brain/raylib-go/raylib"
 
-const MOVE_SPEED float32 = 1
-const ASCEND_SPEED float32 = 1
+const MOVE_SPEED float32 = 0.3
+const ASCEND_SPEED float32 = 0.3
 
 func move() {
 	deltaX := rl.Vector3Subtract(camera3D.Target, camera3D.Position)
