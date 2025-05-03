@@ -12,19 +12,27 @@ var noise = opensimplex.New(time.Now().Unix())
 // actual number of chunks is (2*WORLD_SIZE+1)^2
 const WORLD_SIZE = 10
 
-func genWorld() {
+func generateWorldBlocks() {
 	world = make(map[Position]*Chunk, WORLD_SIZE)
 	for x := -WORLD_SIZE; x <= WORLD_SIZE; x++ {
 		for z := -WORLD_SIZE; z <= WORLD_SIZE; z++ {
 			chunk := &Chunk{}
-			chunk.Generate(noise, Position{X: x, Z: z})
 			world[Position{X: x, Z: z}] = chunk
+			chunk.generateBlocks(noise, Position{X: x, Z: z})
+		}
+	}
+}
+
+func generateWorldMeshes() {
+	for x := -WORLD_SIZE; x <= WORLD_SIZE; x++ {
+		for z := -WORLD_SIZE; z <= WORLD_SIZE; z++ {
+			world[Position{X: x, Z: z}].generateMesh(Position{X: x, Z: z})
 		}
 	}
 }
 
 // the amount of chunks loaded is (2*RENDER_DISTANCE+1)^2
-const RENDER_DISTANCE = 1
+const RENDER_DISTANCE = 10
 
 func renderWorld(renderDistance int) {
 	for chunkPos, chunk := range world {
@@ -34,7 +42,7 @@ func renderWorld(renderDistance int) {
 			chunkPos.X-cameraChunkPos.X >= -renderDistance &&
 			chunkPos.Z-cameraChunkPos.Z <= renderDistance &&
 			chunkPos.Z-cameraChunkPos.Z >= -renderDistance {
-			chunk.Render()
+			chunk.render()
 		}
 	}
 	rl.DrawGrid(2*WORLD_SIZE, CHUNK_SIZE)

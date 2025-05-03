@@ -22,7 +22,8 @@ func Init() {
 	rl.SetTargetFPS(fps)
 	rl.DisableCursor()
 
-	genWorld()
+	generateWorldBlocks()
+	generateWorldMeshes()
 }
 
 func preDraw() {
