@@ -15,17 +15,6 @@ func canvasDrawText(text string, posX, posY float64, fs int32, color color.RGBA)
 
 // 3D
 
-func drawCube(pos rl.Vector3, color color.RGBA) {
-	rl.DrawModel(cubeModel, pos, 1.0, color)
-	rl.DrawCubeWires(pos, 1, 1, 1, rl.Black)
-}
-
-var cubeModel rl.Model
-
-func loadModels() {
-	cubeModel = rl.LoadModelFromMesh(rl.GenMeshCube(1, 1, 1))
-}
-
 type ChunkMesh struct {
 	Initialized bool
 
@@ -34,6 +23,8 @@ type ChunkMesh struct {
 	TriangleCount int32
 	Indices       []uint16
 	Colors        []uint8
+
+	Model rl.Model
 }
 
 func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, color rl.Color) {
@@ -70,7 +61,7 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, color rl.Color) {
 	}
 }
 
-func (chunkMesh *ChunkMesh) render() {
+func (chunkMesh *ChunkMesh) build() {
 	var mesh rl.Mesh
 	mesh.VertexCount = chunkMesh.VertexCount
 	mesh.Vertices = &chunkMesh.Vertices[0]
@@ -79,7 +70,11 @@ func (chunkMesh *ChunkMesh) render() {
 	mesh.Colors = &chunkMesh.Colors[0]
 
 	rl.UploadMesh(&mesh, false)
-	rl.DrawModel(rl.LoadModelFromMesh(mesh), rl.Vector3{}, 1.0, rl.White)
+	chunkMesh.Model = rl.LoadModelFromMesh(mesh)
+}
+
+func (chunkMesh *ChunkMesh) render() {
+	rl.DrawModel(chunkMesh.Model, rl.Vector3{}, 1.0, rl.White)
 }
 
 var cubeVertices = []float32{

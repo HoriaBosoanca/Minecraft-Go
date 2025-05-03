@@ -10,7 +10,7 @@ var world map[Position]*Chunk
 var noise = opensimplex.New(time.Now().Unix())
 
 // actual number of chunks is (2*WORLD_SIZE+1)^2
-const WORLD_SIZE = 30
+const WORLD_SIZE = 10
 
 func genWorld() {
 	world = make(map[Position]*Chunk, WORLD_SIZE)
@@ -24,7 +24,7 @@ func genWorld() {
 }
 
 // the amount of chunks loaded is (2*RENDER_DISTANCE+1)^2
-const RENDER_DISTANCE = 3
+const RENDER_DISTANCE = 1
 
 func renderWorld(renderDistance int) {
 	for chunkPos, chunk := range world {
@@ -34,7 +34,7 @@ func renderWorld(renderDistance int) {
 			chunkPos.X-cameraChunkPos.X >= -renderDistance &&
 			chunkPos.Z-cameraChunkPos.Z <= renderDistance &&
 			chunkPos.Z-cameraChunkPos.Z >= -renderDistance {
-			chunk.Render(Position{X: chunkPos.X, Z: chunkPos.Z})
+			chunk.Render()
 		}
 	}
 	rl.DrawGrid(2*WORLD_SIZE, CHUNK_SIZE)

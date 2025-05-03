@@ -9,12 +9,14 @@ const CHUNK_SIZE = 16
 const CHUNK_HEIGHT = 32
 
 type Chunk struct {
-	blocks [][][]int8 // x z y
+	blocks    [][][]int8 // x z y
+	chunkMesh *ChunkMesh
 }
 
 const craziness = 0.05
 
 func (chunk *Chunk) Generate(noise opensimplex.Noise, chunkPos Position) {
+	// generating
 	chunk.blocks = make([][][]int8, CHUNK_SIZE)
 	for x := 0; x < CHUNK_SIZE; x++ {
 		chunk.blocks[x] = make([][]int8, CHUNK_SIZE)
@@ -35,31 +37,36 @@ func (chunk *Chunk) Generate(noise opensimplex.Noise, chunkPos Position) {
 			}
 		}
 	}
-}
 
-func (chunk *Chunk) Render(chunkPos Position) {
+	// meshing
+	chunk.chunkMesh = &ChunkMesh{}
 	for x, plane := range chunk.blocks {
 		for z, col := range plane {
 			for y, block := range col {
 				xBlockWorld := chunkPos.X*CHUNK_SIZE + x
 				zBlockWorld := chunkPos.Z*CHUNK_SIZE + z
-				if block == AirBlock || chunk.isBlockSurrounded(xBlockWorld, y, zBlockWorld) {
+				if block == AirBlock {
 					continue
 				}
 				drawPos := rl.Vector3{X: float32(xBlockWorld), Y: float32(y), Z: float32(zBlockWorld)}
 				switch block {
 				case GrassBlock:
-					drawCube(drawPos, rl.DarkGreen)
+					chunk.chunkMesh.addBlock(drawPos, rl.DarkGreen)
 				case DirtBlock:
-					drawCube(drawPos, rl.Brown)
+					chunk.chunkMesh.addBlock(drawPos, rl.Brown)
 				case StoneBlock:
-					drawCube(drawPos, rl.Gray)
+					chunk.chunkMesh.addBlock(drawPos, rl.Gray)
 				default:
 					continue
 				}
 			}
 		}
 	}
+	chunk.chunkMesh.build()
+}
+
+func (chunk *Chunk) Render() {
+	chunk.chunkMesh.render()
 }
 
 func (chunk *Chunk) isBlockSurrounded(x, y, z int) bool {
