@@ -18,16 +18,19 @@ func canvasDrawText(text string, posX, posY float64, fs int32, color color.RGBA)
 type ChunkMesh struct {
 	Initialized bool
 
-	VertexCount   int32
-	Vertices      []float32
-	TriangleCount int32
-	Indices       []uint16
-	Colors        []uint8
+	VertexCount    int32
+	Vertices       []float32
+	TriangleCount  int32
+	Indices        []uint16
+	Colors         []uint8
+	TexcoordsCount int32
+	Texcoords      []float32
 
 	Model rl.Model
 }
 
 func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, color rl.Color) {
+	// Initialization
 	if !chunkMesh.Initialized {
 		chunkMesh.Initialized = true
 		chunkMesh.VertexCount = 0
@@ -35,8 +38,10 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, color rl.Color) {
 		chunkMesh.TriangleCount = 0
 		chunkMesh.Indices = make([]uint16, 0)
 		chunkMesh.Colors = make([]uint8, 0)
+		chunkMesh.TexcoordsCount = 0
 	}
 
+	// Vertices
 	chunkMesh.VertexCount += 36
 	translatedVertices := make([]float32, len(cubeVertices))
 	copy(translatedVertices, cubeVertices)
@@ -51,14 +56,21 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, color rl.Color) {
 		}
 	}
 	chunkMesh.Vertices = append(chunkMesh.Vertices, translatedVertices...)
+
+	// Indices
 	chunkMesh.TriangleCount += 12
 	startIndex := uint16(len(chunkMesh.Indices))
 	for i := startIndex; i < startIndex+36; i++ {
 		chunkMesh.Indices = append(chunkMesh.Indices, i)
 	}
+
+	// Colors
 	for i := 0; i < 36; i++ {
 		chunkMesh.Colors = append(chunkMesh.Colors, color.R, color.G, color.B, color.A)
 	}
+
+	// Textures
+	chunkMesh.Texcoords = append(chunkMesh.Texcoords, cubeTexture...)
 }
 
 func (chunkMesh *ChunkMesh) build() {
@@ -68,9 +80,11 @@ func (chunkMesh *ChunkMesh) build() {
 	mesh.TriangleCount = chunkMesh.TriangleCount
 	mesh.Indices = &chunkMesh.Indices[0]
 	mesh.Colors = &chunkMesh.Colors[0]
+	mesh.Texcoords = &chunkMesh.Texcoords[0]
 
 	rl.UploadMesh(&mesh, false)
 	chunkMesh.Model = rl.LoadModelFromMesh(mesh)
+	chunkMesh.Model.Materials.Maps.Texture = rl.LoadTexture("assets/planks.png")
 }
 
 func (chunkMesh *ChunkMesh) render() {
@@ -125,4 +139,54 @@ var cubeVertices = []float32{
 	1.0, 0.0, 1.0,
 	0.0, 0.0, 1.0,
 	1.0, 0.0, 0.0,
+}
+
+var cubeTexture = []float32{
+	// face 1
+	0.0, 0.0,
+	0.0, 1.0,
+	1.0, 0.0,
+	1.0, 1.0,
+	1.0, 0.0,
+	0.0, 1.0,
+
+	// face 2
+	1.0, 1.0,
+	1.0, 0.0,
+	0.0, 0.0,
+	0.0, 0.0,
+	0.0, 1.0,
+	1.0, 1.0,
+
+	// face 3
+	1.0, 1.0,
+	1.0, 0.0,
+	0.0, 0.0,
+	0.0, 0.0,
+	0.0, 1.0,
+	1.0, 1.0,
+
+	// face 4
+	0.0, 0.0,
+	0.0, 1.0,
+	1.0, 0.0,
+	1.0, 1.0,
+	1.0, 0.0,
+	0.0, 1.0,
+
+	// face 5
+	0.0, 0.0,
+	0.0, 1.0,
+	1.0, 1.0,
+	1.0, 1.0,
+	1.0, 0.0,
+	0.0, 0.0,
+
+	// face 6
+	0.0, 0.0,
+	0.0, 1.0,
+	1.0, 0.0,
+	1.0, 1.0,
+	1.0, 0.0,
+	0.0, 1.0,
 }
