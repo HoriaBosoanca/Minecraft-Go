@@ -53,16 +53,7 @@ func (chunk *Chunk) generateMesh(chunkPos Position) {
 					continue
 				}
 				drawPos := rl.Vector3{X: float32(xBlockWorld), Y: float32(y), Z: float32(zBlockWorld)}
-				switch block {
-				case GrassBlock:
-					chunk.chunkMesh.addBlock(drawPos, rl.DarkGreen)
-				case DirtBlock:
-					chunk.chunkMesh.addBlock(drawPos, rl.Brown)
-				case StoneBlock:
-					chunk.chunkMesh.addBlock(drawPos, rl.Gray)
-				default:
-					continue
-				}
+				chunk.chunkMesh.addBlock(drawPos, block)
 			}
 		}
 	}

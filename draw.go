@@ -29,9 +29,7 @@ type ChunkMesh struct {
 	Model rl.Model
 }
 
-func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, color rl.Color) {
-	block := GrassBlock
-
+func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
 	// Initialization
 	if !chunkMesh.Initialized {
 		chunkMesh.Initialized = true
@@ -44,7 +42,7 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, color rl.Color) {
 	}
 
 	// Vertices
-	chunkMesh.VertexCount += 36
+	chunkMesh.VertexCount += int32(len(cubeVertices) / 3)
 	translatedVertices := make([]float32, len(cubeVertices))
 	copy(translatedVertices, cubeVertices)
 	for i := range translatedVertices {
@@ -68,18 +66,35 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, color rl.Color) {
 
 	// Colors
 	for i := 0; i < 36; i++ {
-		chunkMesh.Colors = append(chunkMesh.Colors, color.R, color.G, color.B, color.A)
+		white := rl.White
+		chunkMesh.Colors = append(chunkMesh.Colors, white.R, white.G, white.B, white.A)
 	}
 
 	// Textures
-	coordinatesUV := make([]float32, 72)
-	switch block {
+	coordinatesUV := make([]float32, len(cubeTexture))
+	switch block { // if i % 2 == 0 -> U, else -> V
 	case GrassBlock:
 		for i, v := range cubeTexture {
-			if i%2 == 0 {
-				coordinatesUV[i] = v / 8.0
-			} else {
-				coordinatesUV[i] = v/8.0 + 0.875
+			if i >= FACE_1_START && i <= FACE_4_END {
+				if i%2 == 0 {
+					coordinatesUV[i] = v + GRASS_SIDE_U
+				} else {
+					coordinatesUV[i] = v + GRASS_SIDE_V
+				}
+			}
+			if i >= FACE_5_START && i <= FACE_5_END {
+				if i%2 == 0 {
+					coordinatesUV[i] = v + GRASS_TOP_U
+				} else {
+					coordinatesUV[i] = v + GRASS_TOP_V
+				}
+			}
+			if i >= FACE_6_START && i <= FACE_6_END {
+				if i%2 == 0 {
+					coordinatesUV[i] = v + DIRT_U
+				} else {
+					coordinatesUV[i] = v + DIRT_V
+				}
 			}
 		}
 	default:

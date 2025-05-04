@@ -17,8 +17,6 @@ func main() {
 	}
 }
 
-var mesh ChunkMesh
-
 func Init() {
 	rl.InitWindow(screenX, screenY, "My game")
 	rl.SetTargetFPS(fps)
@@ -26,13 +24,8 @@ func Init() {
 
 	loadTextures()
 
-	//generateWorldBlocks()
-	//generateWorldMeshes()
-
-	for i := float32(0); i < 100; i++ {
-		mesh.addBlock(rl.Vector3{i, i, i}, rl.White)
-	}
-	mesh.build()
+	generateWorldBlocks()
+	generateWorldMeshes()
 }
 
 func preDraw() {
@@ -43,8 +36,6 @@ func preDraw() {
 
 func draw3D() {
 	renderWorld(RENDER_DISTANCE)
-
-	mesh.render()
 }
 
 func draw2D() {
