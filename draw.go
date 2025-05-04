@@ -30,6 +30,8 @@ type ChunkMesh struct {
 }
 
 func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, color rl.Color) {
+	block := GrassBlock
+
 	// Initialization
 	if !chunkMesh.Initialized {
 		chunkMesh.Initialized = true
@@ -70,7 +72,19 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, color rl.Color) {
 	}
 
 	// Textures
-	chunkMesh.Texcoords = append(chunkMesh.Texcoords, cubeTexture...)
+	coordinatesUV := make([]float32, 72)
+	switch block {
+	case GrassBlock:
+		for i, v := range cubeTexture {
+			if i%2 == 0 {
+				coordinatesUV[i] = v / 8.0
+			} else {
+				coordinatesUV[i] = v/8.0 + 0.875
+			}
+		}
+	default:
+	}
+	chunkMesh.Texcoords = append(chunkMesh.Texcoords, coordinatesUV...)
 }
 
 func (chunkMesh *ChunkMesh) build() {
@@ -84,7 +98,7 @@ func (chunkMesh *ChunkMesh) build() {
 
 	rl.UploadMesh(&mesh, false)
 	chunkMesh.Model = rl.LoadModelFromMesh(mesh)
-	chunkMesh.Model.Materials.Maps.Texture = rl.LoadTexture("assets/planks.png")
+	chunkMesh.Model.Materials.Maps.Texture = atlas
 }
 
 func (chunkMesh *ChunkMesh) render() {
@@ -139,54 +153,4 @@ var cubeVertices = []float32{
 	1.0, 0.0, 1.0,
 	0.0, 0.0, 1.0,
 	1.0, 0.0, 0.0,
-}
-
-var cubeTexture = []float32{
-	// face 1
-	0.0, 0.0,
-	0.0, 1.0,
-	1.0, 0.0,
-	1.0, 1.0,
-	1.0, 0.0,
-	0.0, 1.0,
-
-	// face 2
-	1.0, 1.0,
-	1.0, 0.0,
-	0.0, 0.0,
-	0.0, 0.0,
-	0.0, 1.0,
-	1.0, 1.0,
-
-	// face 3
-	1.0, 1.0,
-	1.0, 0.0,
-	0.0, 0.0,
-	0.0, 0.0,
-	0.0, 1.0,
-	1.0, 1.0,
-
-	// face 4
-	0.0, 0.0,
-	0.0, 1.0,
-	1.0, 0.0,
-	1.0, 1.0,
-	1.0, 0.0,
-	0.0, 1.0,
-
-	// face 5
-	0.0, 0.0,
-	0.0, 1.0,
-	1.0, 1.0,
-	1.0, 1.0,
-	1.0, 0.0,
-	0.0, 0.0,
-
-	// face 6
-	0.0, 0.0,
-	0.0, 1.0,
-	1.0, 0.0,
-	1.0, 1.0,
-	1.0, 0.0,
-	0.0, 1.0,
 }
