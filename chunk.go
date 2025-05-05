@@ -14,7 +14,7 @@ type Chunk struct {
 	chunkMesh *ChunkMesh
 }
 
-const craziness = 0.05
+const craziness = 0.03
 
 func (chunk *Chunk) generateBlocks(noise opensimplex.Noise, chunkPos Position) {
 	chunk.blocks = make([][][]int8, CHUNK_SIZE)
