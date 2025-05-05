@@ -1,4 +1,4 @@
-module raylib-game
+module raygocraft
 
 go 1.24.2
 
