@@ -72,9 +72,9 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
 
 	// Textures
 	coordinatesUV := make([]float32, len(cubeTexture))
-	switch block { // if i % 2 == 0 -> U, else -> V
-	case GrassBlock:
-		for i, v := range cubeTexture {
+	for i, v := range cubeTexture {
+		switch block { // if i % 2 == 0 -> U, else -> V
+		case GrassBlock:
 			if i >= FACE_1_START && i <= FACE_4_END {
 				if i%2 == 0 {
 					coordinatesUV[i] = v + GRASS_SIDE_U
@@ -96,8 +96,20 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
 					coordinatesUV[i] = v + DIRT_V
 				}
 			}
+		case DirtBlock:
+			if i%2 == 0 {
+				coordinatesUV[i] = v + DIRT_U
+			} else {
+				coordinatesUV[i] = v + DIRT_V
+			}
+		case StoneBlock:
+			if i%2 == 0 {
+				coordinatesUV[i] = v + STONE_U
+			} else {
+				coordinatesUV[i] = v + STONE_V
+			}
 		}
-	default:
+
 	}
 	chunkMesh.Texcoords = append(chunkMesh.Texcoords, coordinatesUV...)
 }

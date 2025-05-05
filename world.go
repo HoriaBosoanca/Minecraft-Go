@@ -10,7 +10,7 @@ var world map[Position]*Chunk
 var noise = opensimplex.New(time.Now().Unix())
 
 // actual number of chunks is (2*WORLD_SIZE+1)^2
-const WORLD_SIZE = 32
+const WORLD_SIZE = 16
 
 func generateWorldBlocks() {
 	world = make(map[Position]*Chunk, WORLD_SIZE)

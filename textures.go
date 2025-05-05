@@ -36,6 +36,9 @@ const ( // textures begin at the top left of the atlas
 
 	DIRT_U = ATLAS_UNIT * 1.0
 	DIRT_V = ATLAS_UNIT * 7.0
+
+	STONE_U = ATLAS_UNIT * 4.0
+	STONE_V = ATLAS_UNIT * 6.0
 )
 
 func loadTextures() {
