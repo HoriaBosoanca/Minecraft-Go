@@ -73,43 +73,17 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
 	// Textures
 	coordinatesUV := make([]float32, len(cubeTexture))
 	for i, v := range cubeTexture {
-		switch block { // if i % 2 == 0 -> U, else -> V
-		case GrassBlock:
-			if i >= FACE_1_START && i <= FACE_4_END {
-				if i%2 == 0 {
-					coordinatesUV[i] = v + GRASS_SIDE_U
-				} else {
-					coordinatesUV[i] = v + GRASS_SIDE_V
-				}
-			}
-			if i >= FACE_5_START && i <= FACE_5_END {
-				if i%2 == 0 {
-					coordinatesUV[i] = v + GRASS_TOP_U
-				} else {
-					coordinatesUV[i] = v + GRASS_TOP_V
-				}
-			}
-			if i >= FACE_6_START && i <= FACE_6_END {
-				if i%2 == 0 {
-					coordinatesUV[i] = v + DIRT_U
-				} else {
-					coordinatesUV[i] = v + DIRT_V
-				}
-			}
-		case DirtBlock:
-			if i%2 == 0 {
-				coordinatesUV[i] = v + DIRT_U
-			} else {
-				coordinatesUV[i] = v + DIRT_V
-			}
-		case StoneBlock:
-			if i%2 == 0 {
-				coordinatesUV[i] = v + STONE_U
-			} else {
-				coordinatesUV[i] = v + STONE_V
-			}
-		}
+		// add the offset corresponding to the block's face's texture:
 
+		// there are 36 UV points (3 per triangle; there are 12 triangles), so 72 float32s in the standard cube texture
+		// each face has 12 float32s (72 total float32s / 6 faces = 12 float32s per face)
+		// with i being in the range 1...71, i/12 is the index of each face (0...5)
+
+		if i%2 == 0 { // even -> U
+			coordinatesUV[i] = v + textureMap[block][i/12].X
+		} else { // odd -> V
+			coordinatesUV[i] = v + textureMap[block][i/12].Y
+		}
 	}
 	chunkMesh.Texcoords = append(chunkMesh.Texcoords, coordinatesUV...)
 }
