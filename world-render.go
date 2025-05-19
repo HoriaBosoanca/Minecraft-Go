@@ -10,12 +10,12 @@ func (world *World) renderWorld(renderDistance int) {
 			chunkPos.X-cameraChunkPos.X >= -renderDistance &&
 			chunkPos.Z-cameraChunkPos.Z <= renderDistance &&
 			chunkPos.Z-cameraChunkPos.Z >= -renderDistance {
-			chunk.render()
+			chunk.chunkMesh.render()
 		}
 	}
 	rl.DrawGrid(2*WORLD_SIZE, CHUNK_SIZE)
 }
 
-func (chunk *Chunk) render() {
-	chunk.chunkMesh.render()
+func (chunkMesh *ChunkMesh) render() {
+	rl.DrawModel(chunkMesh.Model, rl.Vector3{}, 1.0, rl.White)
 }

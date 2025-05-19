@@ -17,6 +17,17 @@ const (
 	StoneBlock
 )
 
+func (world *World) generateWorldBlocks() {
+	world.chunks = make(map[Position]*Chunk, WORLD_SIZE)
+	for x := -WORLD_SIZE; x <= WORLD_SIZE; x++ {
+		for z := -WORLD_SIZE; z <= WORLD_SIZE; z++ {
+			chunk := &Chunk{}
+			world.chunks[Position{X: x, Z: z}] = chunk
+			chunk.generateBlocks(Position{X: x, Z: z})
+		}
+	}
+}
+
 func (chunk *Chunk) generateBlocks(chunkPos Position) {
 	chunk.blocks = make([][][]int8, CHUNK_SIZE)
 	for x := 0; x < CHUNK_SIZE; x++ {

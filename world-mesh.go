@@ -35,26 +35,16 @@ type Position struct {
 
 // GENERATION
 
-func (world *World) generateWorldBlocks() {
-	world.chunks = make(map[Position]*Chunk, WORLD_SIZE)
-	for x := -WORLD_SIZE; x <= WORLD_SIZE; x++ {
-		for z := -WORLD_SIZE; z <= WORLD_SIZE; z++ {
-			chunk := &Chunk{}
-			world.chunks[Position{X: x, Z: z}] = chunk
-			chunk.generateBlocks(Position{X: x, Z: z})
-		}
-	}
-}
-
 func (world *World) generateWorldMeshes() {
 	for x := -WORLD_SIZE; x <= WORLD_SIZE; x++ {
 		for z := -WORLD_SIZE; z <= WORLD_SIZE; z++ {
-			world.chunks[Position{X: x, Z: z}].generateMesh(Position{X: x, Z: z}, world)
+			world.chunks[Position{X: x, Z: z}].generateChunkMesh(Position{X: x, Z: z}, world)
 		}
 	}
 }
 
-func (chunk *Chunk) generateMesh(chunkPos Position, world *World) {
+// the world is taken as a parameter for some much-needed optimizations, but can be removed
+func (chunk *Chunk) generateChunkMesh(chunkPos Position, world *World) {
 	chunk.chunkMesh = &ChunkMesh{}
 	for x, plane := range chunk.blocks {
 		for z, col := range plane {
@@ -69,7 +59,7 @@ func (chunk *Chunk) generateMesh(chunkPos Position, world *World) {
 			}
 		}
 	}
-	chunk.chunkMesh.build()
+	chunk.chunkMesh.buildChunkMesh()
 }
 
 func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
@@ -131,7 +121,7 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
 	chunkMesh.Texcoords = append(chunkMesh.Texcoords, coordinatesUV...)
 }
 
-func (chunkMesh *ChunkMesh) build() {
+func (chunkMesh *ChunkMesh) buildChunkMesh() {
 	var mesh rl.Mesh
 	mesh.VertexCount = chunkMesh.VertexCount
 	mesh.Vertices = &chunkMesh.Vertices[0]
@@ -143,10 +133,6 @@ func (chunkMesh *ChunkMesh) build() {
 	rl.UploadMesh(&mesh, false)
 	chunkMesh.Model = rl.LoadModelFromMesh(mesh)
 	chunkMesh.Model.Materials.Maps.Texture = atlas
-}
-
-func (chunkMesh *ChunkMesh) render() {
-	rl.DrawModel(chunkMesh.Model, rl.Vector3{}, 1.0, rl.White)
 }
 
 // HELPER FUNCTIONS
