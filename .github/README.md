@@ -4,15 +4,16 @@ implemented in Go using the [raylib-go](https://github.com/gen2brain/raylib-go) 
 # Development
 This is a small project for now. WIP
 
-![](/assets/readme.png)
+![](/.github/README.png)
 # Downloading
 ### Linux
 Download the game on [itch.io](https://redplayer333hhh.itch.io/raygocraft). 
 Make sure you download both files and run the executable while it's in the same directory as the png.
-Alternatively, git clone this repository and run it's executable.
+Alternatively, git clone this repository and run it's executable located in /bin.
 # Building
 ### Linux
 After cloning the repository and "cd"-ing into the project directory,
-run the "go build" command to generate the executable.
+run the "go build" command to generate the executable
+or use chmod +x run.sh and run the script with ./run.sh.
 One of the project dependencies (raylib-go) might require extra dependencies, 
 which can be installed as described [here](https://github.com/gen2brain/raylib-go?tab=readme-ov-file#requirements).
