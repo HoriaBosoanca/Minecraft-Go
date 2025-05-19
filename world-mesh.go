@@ -132,7 +132,9 @@ func (chunkMesh *ChunkMesh) buildChunkMesh() {
 
 	rl.UploadMesh(&mesh, false)
 	chunkMesh.Model = rl.LoadModelFromMesh(mesh)
-	chunkMesh.Model.Materials.Maps.Texture = atlas
+	if chunkMesh.Model.Materials != nil {
+		chunkMesh.Model.Materials.Maps.Texture = atlas
+	}
 }
 
 // HELPER FUNCTIONS
