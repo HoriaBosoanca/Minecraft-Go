@@ -15,7 +15,7 @@ var ( // textures begin at the top left of the atlas
 )
 
 func loadTextures() {
-	atlas = rl.LoadTexture("atlas.png")
+	atlas = rl.LoadTexture("assets/atlas.png")
 	for i := range cubeTexture {
 		cubeTexture[i] /= BLOCKS_PER_ATLAS_WIDTH
 	}
