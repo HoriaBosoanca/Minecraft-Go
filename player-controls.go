@@ -1,6 +1,9 @@
 package main
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	"fmt"
+	rl "github.com/gen2brain/raylib-go/raylib"
+)
 
 func handleInput() {
 	deltaX := rl.Vector3Subtract(camera3D.Target, camera3D.Position)
@@ -8,6 +11,8 @@ func handleInput() {
 	deltaX = rl.Vector3Normalize(deltaX)
 	deltaX = rl.Vector3Scale(deltaX, MOVE_SPEED)
 	deltaZ := rl.NewVector3(deltaX.Z, 0, -deltaX.X)
+	deltaX = rl.Vector3Scale(deltaX, rl.GetFrameTime())
+	deltaZ = rl.Vector3Scale(deltaZ, rl.GetFrameTime())
 
 	if rl.IsKeyDown(rl.KeyW) {
 		camera3D.Position = rl.Vector3Add(camera3D.Position, deltaX)
@@ -27,22 +32,28 @@ func handleInput() {
 	}
 
 	if rl.IsKeyDown(rl.KeySpace) {
-		camera3D.Position.Y += ASCEND_SPEED
-		camera3D.Target.Y += ASCEND_SPEED
+		camera3D.Position.Y += ASCEND_SPEED * rl.GetFrameTime()
+		camera3D.Target.Y += ASCEND_SPEED * rl.GetFrameTime()
 	}
 	if rl.IsKeyDown(rl.KeyLeftShift) {
-		camera3D.Position.Y -= ASCEND_SPEED
-		camera3D.Target.Y -= ASCEND_SPEED
+		camera3D.Position.Y -= ASCEND_SPEED * rl.GetFrameTime()
+		camera3D.Target.Y -= ASCEND_SPEED * rl.GetFrameTime()
 	}
 
-	if rl.IsKeyDown(rl.KeyF11) {
+	if rl.IsKeyPressed(rl.KeyF11) {
 		rl.ToggleFullscreen()
 	}
-	if rl.IsKeyDown(rl.KeyF10) {
+	if rl.IsKeyPressed(rl.KeyF10) {
 		if rl.IsCursorHidden() {
 			rl.EnableCursor()
 		} else {
 			rl.DisableCursor()
 		}
+	}
+
+	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
+		ray := rl.GetScreenToWorldRay(rl.GetMousePosition(), camera3D)
+		target := world.getRayTarget(ray)
+		fmt.Println(target)
 	}
 }

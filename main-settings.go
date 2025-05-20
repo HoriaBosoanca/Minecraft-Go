@@ -28,6 +28,6 @@ const (
 // --> PLAYER
 
 const (
-	MOVE_SPEED   float32 = 1
-	ASCEND_SPEED float32 = 1
+	MOVE_SPEED   float32 = 50
+	ASCEND_SPEED float32 = 100
 )

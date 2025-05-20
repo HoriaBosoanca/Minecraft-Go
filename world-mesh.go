@@ -9,8 +9,10 @@ type World struct {
 	chunks map[Position]*Chunk
 }
 
+// TODO: Rewrite type
 type Chunk struct {
-	blocks    [][][]int8 // x z y
+	blocks    [][][]int8           // x z y
+	boxes     [][][]rl.BoundingBox // temp
 	chunkMesh *ChunkMesh
 }
 
@@ -43,11 +45,15 @@ func (world *World) generateWorldMeshes() {
 	}
 }
 
+// TODO: make separate func for boxes
 // the world is taken as a parameter for some much-needed optimizations, but can be removed
 func (chunk *Chunk) generateChunkMesh(chunkPos Position, world *World) {
 	chunk.chunkMesh = &ChunkMesh{}
+	chunk.boxes = make([][][]rl.BoundingBox, len(chunk.blocks))
 	for x, plane := range chunk.blocks {
+		chunk.boxes[x] = make([][]rl.BoundingBox, len(plane))
 		for z, col := range plane {
+			chunk.boxes[x][z] = make([]rl.BoundingBox, len(col))
 			for y, block := range col {
 				xBlockWorld := chunkPos.X*CHUNK_SIZE + x
 				zBlockWorld := chunkPos.Z*CHUNK_SIZE + z
@@ -56,6 +62,9 @@ func (chunk *Chunk) generateChunkMesh(chunkPos Position, world *World) {
 				}
 				drawPos := rl.Vector3{X: float32(xBlockWorld), Y: float32(y), Z: float32(zBlockWorld)}
 				chunk.chunkMesh.addBlock(drawPos, block)
+
+				// temp
+				chunk.boxes[x][z][y] = rl.NewBoundingBox(drawPos, rl.Vector3Add(drawPos, rl.Vector3{1, 1, 1}))
 			}
 		}
 	}
