@@ -6,12 +6,6 @@ import (
 
 // --> GRAPHICS
 
-// laptop screen sizes
-const (
-	X_SCREEN int32 = 1850
-	Y_SCREEN int32 = 1010
-)
-
 var fps int32 = 500
 
 var camera3D = rl.Camera{
@@ -27,7 +21,7 @@ var camera3D = rl.Camera{
 const (
 	CHUNK_SIZE      = 16
 	CHUNK_HEIGHT    = 32
-	WORLD_SIZE      = 25 // actual number of chunks is (2*WORLD_SIZE+1)^2
+	WORLD_SIZE      = 16 // actual number of chunks is (2*WORLD_SIZE+1)^2
 	RENDER_DISTANCE = 32 // the number of chunks loaded is (2*RENDER_DISTANCE+1)^2
 )
 

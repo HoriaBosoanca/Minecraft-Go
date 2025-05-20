@@ -2,7 +2,7 @@ package main
 
 import rl "github.com/gen2brain/raylib-go/raylib"
 
-func move() {
+func handleInput() {
 	deltaX := rl.Vector3Subtract(camera3D.Target, camera3D.Position)
 	deltaX.Y = 0
 	deltaX = rl.Vector3Normalize(deltaX)
@@ -33,5 +33,16 @@ func move() {
 	if rl.IsKeyDown(rl.KeyLeftShift) {
 		camera3D.Position.Y -= ASCEND_SPEED
 		camera3D.Target.Y -= ASCEND_SPEED
+	}
+
+	if rl.IsKeyDown(rl.KeyF11) {
+		rl.ToggleFullscreen()
+	}
+	if rl.IsKeyDown(rl.KeyF10) {
+		if rl.IsCursorHidden() {
+			rl.EnableCursor()
+		} else {
+			rl.DisableCursor()
+		}
 	}
 }
