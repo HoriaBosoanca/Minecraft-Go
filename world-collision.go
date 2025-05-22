@@ -26,9 +26,9 @@ func (world *World) getSolidRayHitBlocks(ray rl.Ray) []*Block {
 	for _, chunk := range world.chunks {
 		rayCol := rl.GetRayCollisionBox(ray, chunk.collider)
 		if rayCol.Hit {
-			for _, plane := range chunk.blocks {
-				for _, col := range plane {
-					for _, block := range col {
+			for x := range chunk.blocks {
+				for z := range chunk.blocks[x] {
+					for _, block := range chunk.blocks[x][z] {
 						rayCollision := rl.GetRayCollisionBox(ray, block.collider)
 						if rayCollision.Hit && block.data != AirBlock {
 							collidedBlocks = append(collidedBlocks, block)
