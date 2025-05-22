@@ -52,8 +52,6 @@ func handleInput() {
 	}
 
 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-		ray := rl.GetScreenToWorldRay(rl.GetMousePosition(), camera3D)
-		target := world.getRayTarget(ray)
-		fmt.Println(target)
+		fmt.Println(world.getClosestTargetedBlock())
 	}
 }

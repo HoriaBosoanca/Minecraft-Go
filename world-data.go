@@ -17,23 +17,15 @@ const (
 	StoneBlock
 )
 
-func (world *World) generateWorldBlocks() {
-	world.chunks = make(map[Position]*Chunk, WORLD_SIZE)
-	for x := -WORLD_SIZE; x <= WORLD_SIZE; x++ {
-		for z := -WORLD_SIZE; z <= WORLD_SIZE; z++ {
-			chunk := &Chunk{}
-			world.chunks[Position{X: x, Z: z}] = chunk
-			chunk.generateBlocks(Position{X: x, Z: z})
-		}
+func (world *World) generateBlocks() {
+	for chunkPos, chunk := range world.chunks {
+		chunk.generateBlockData(chunkPos)
 	}
 }
 
-func (chunk *Chunk) generateBlocks(chunkPos Position) {
-	chunk.blocks = make([][][]int8, CHUNK_SIZE)
-	for x := 0; x < CHUNK_SIZE; x++ {
-		chunk.blocks[x] = make([][]int8, CHUNK_SIZE)
-		for z := 0; z < CHUNK_SIZE; z++ {
-			chunk.blocks[x][z] = make([]int8, CHUNK_HEIGHT)
+func (chunk *Chunk) generateBlockData(chunkPos Position) {
+	for x := range chunk.blocks {
+		for z := range chunk.blocks[x] {
 			worldPos := chunkAndLocalToWorldPos(chunkPos, Position{X: x, Z: z})
 			ground := (noise.Eval2(float64(worldPos.X)*craziness, float64(worldPos.Z)*craziness) + 1) / 2 * CHUNK_HEIGHT
 			if ground < 3 {
@@ -41,13 +33,13 @@ func (chunk *Chunk) generateBlocks(chunkPos Position) {
 			}
 			for y := 0; y < CHUNK_HEIGHT; y++ {
 				if y == int(ground) {
-					chunk.blocks[x][z][y] = GrassBlock
+					chunk.blocks[x][z][y].data = GrassBlock
 				} else if y < int(ground) && y >= int(ground-5) {
-					chunk.blocks[x][z][y] = DirtBlock
+					chunk.blocks[x][z][y].data = DirtBlock
 				} else if y < int(ground) {
-					chunk.blocks[x][z][y] = StoneBlock
+					chunk.blocks[x][z][y].data = StoneBlock
 				} else {
-					chunk.blocks[x][z][y] = AirBlock
+					chunk.blocks[x][z][y].data = AirBlock
 				}
 			}
 		}

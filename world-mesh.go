@@ -4,18 +4,6 @@ import (
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-// TYPES
-type World struct {
-	chunks map[Position]*Chunk
-}
-
-// TODO: Rewrite type
-type Chunk struct {
-	blocks    [][][]int8           // x z y
-	boxes     [][][]rl.BoundingBox // temp
-	chunkMesh *ChunkMesh
-}
-
 type ChunkMesh struct {
 	Initialized bool
 
@@ -30,45 +18,28 @@ type ChunkMesh struct {
 	Model rl.Model
 }
 
-type Position struct {
-	X int
-	Z int
-}
-
-// GENERATION
-
-func (world *World) generateWorldMeshes() {
-	for x := -WORLD_SIZE; x <= WORLD_SIZE; x++ {
-		for z := -WORLD_SIZE; z <= WORLD_SIZE; z++ {
-			world.chunks[Position{X: x, Z: z}].generateChunkMesh(Position{X: x, Z: z}, world)
-		}
+func (world *World) generateMeshes() {
+	for worldPos, chunk := range world.chunks {
+		chunk.generateChunkMesh(Position{X: worldPos.X, Z: worldPos.Z}, world)
 	}
 }
 
-// TODO: make separate func for boxes
 // the world is taken as a parameter for some much-needed optimizations, but can be removed
 func (chunk *Chunk) generateChunkMesh(chunkPos Position, world *World) {
-	chunk.chunkMesh = &ChunkMesh{}
-	chunk.boxes = make([][][]rl.BoundingBox, len(chunk.blocks))
-	for x, plane := range chunk.blocks {
-		chunk.boxes[x] = make([][]rl.BoundingBox, len(plane))
-		for z, col := range plane {
-			chunk.boxes[x][z] = make([]rl.BoundingBox, len(col))
-			for y, block := range col {
-				xBlockWorld := chunkPos.X*CHUNK_SIZE + x
-				zBlockWorld := chunkPos.Z*CHUNK_SIZE + z
-				if block == AirBlock || world.isBlockSurrounded(xBlockWorld, y, zBlockWorld) {
+	chunk.mesh = &ChunkMesh{}
+	for x := range chunk.blocks {
+		for z := range chunk.blocks[x] {
+			for y, block := range chunk.blocks[x][z] {
+				worldPos := chunkAndLocalToWorldPos(chunkPos, Position{X: x, Z: z})
+				if block.data == AirBlock || world.isBlockSurrounded(worldPos.X, y, worldPos.Z) {
 					continue
 				}
-				drawPos := rl.Vector3{X: float32(xBlockWorld), Y: float32(y), Z: float32(zBlockWorld)}
-				chunk.chunkMesh.addBlock(drawPos, block)
-
-				// temp
-				chunk.boxes[x][z][y] = rl.NewBoundingBox(drawPos, rl.Vector3Add(drawPos, rl.Vector3{1, 1, 1}))
+				drawPos := rl.Vector3{X: float32(worldPos.X), Y: float32(y), Z: float32(worldPos.Z)}
+				chunk.mesh.addBlock(drawPos, block.data)
 			}
 		}
 	}
-	chunk.chunkMesh.buildChunkMesh()
+	chunk.mesh.buildChunkMesh()
 }
 
 func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
@@ -144,71 +115,6 @@ func (chunkMesh *ChunkMesh) buildChunkMesh() {
 	if chunkMesh.Model.Materials != nil {
 		chunkMesh.Model.Materials.Maps.Texture = atlas
 	}
-}
-
-// HELPER FUNCTIONS
-
-func worldToChunkPos(worldPos Position) (chunkPos Position) {
-	xChunk := worldPos.X / CHUNK_SIZE
-	if worldPos.X < 0 && worldPos.X%CHUNK_SIZE != 0 {
-		xChunk--
-	}
-	zChunk := worldPos.Z / CHUNK_SIZE
-	if worldPos.Z < 0 && worldPos.Z%CHUNK_SIZE != 0 {
-		zChunk--
-	}
-	return Position{X: xChunk, Z: zChunk}
-}
-
-// local = coordinates of block within chunk
-func worldToLocalPos(worldPos Position) (localPos Position) {
-	chunkCoords := worldToChunkPos(worldPos)
-	localX := worldPos.X - chunkCoords.X*CHUNK_SIZE
-	localZ := worldPos.Z - chunkCoords.Z*CHUNK_SIZE
-	return Position{X: localX, Z: localZ}
-}
-
-func chunkAndLocalToWorldPos(chunkPos, localPos Position) (worldPos Position) {
-	return Position{X: chunkPos.X*CHUNK_SIZE + localPos.X, Z: chunkPos.Z*CHUNK_SIZE + localPos.Z}
-}
-
-func (world *World) worldGetBlock(x, y, z int) int8 {
-	if y < 0 || y >= CHUNK_HEIGHT {
-		return AirBlock
-	}
-
-	worldPos := Position{X: x, Z: z}
-	chunkPos := worldToChunkPos(worldPos)
-	chunk, ok := world.chunks[Position{X: chunkPos.X, Z: chunkPos.Z}]
-	if !ok {
-		return AirBlock
-	}
-
-	localPos := worldToLocalPos(worldPos)
-
-	return chunk.blocks[localPos.X][localPos.Z][y]
-}
-
-func (world *World) isBlockSurrounded(x, y, z int) bool {
-	if world.worldGetBlock(x-1, y, z) == AirBlock {
-		return false
-	}
-	if world.worldGetBlock(x+1, y, z) == AirBlock {
-		return false
-	}
-	if world.worldGetBlock(x, y-1, z) == AirBlock {
-		return false
-	}
-	if world.worldGetBlock(x, y+1, z) == AirBlock {
-		return false
-	}
-	if world.worldGetBlock(x, y, z-1) == AirBlock {
-		return false
-	}
-	if world.worldGetBlock(x, y, z+1) == AirBlock {
-		return false
-	}
-	return true
 }
 
 var cubeVertices = []float32{

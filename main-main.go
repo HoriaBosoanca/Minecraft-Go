@@ -21,11 +21,13 @@ func Init() {
 	rl.InitWindow(int32(rl.GetScreenWidth()), int32(rl.GetScreenHeight()), "Raygocraft")
 	rl.ToggleFullscreen()
 	rl.SetTargetFPS(fps)
-	rl.DisableCursor()
+	//rl.DisableCursor()
 
 	loadTextures()
-	world.generateWorldBlocks()
-	world.generateWorldMeshes()
+	world.memoryInit()
+	world.colliderInit()
+	world.generateBlocks()
+	world.generateMeshes()
 }
 
 func preDraw() {
