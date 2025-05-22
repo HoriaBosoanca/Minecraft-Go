@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -52,6 +51,13 @@ func handleInput() {
 	}
 
 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-		fmt.Println(world.getClosestTargetedBlock())
+		// break block
+	}
+}
+
+func drawPlayerTarget() {
+	block := world.getClosestTargetedBlock()
+	if block != nil {
+		rl.DrawCube(rl.Vector3Add(block.collider.Min, rl.Vector3{X: 0.5, Y: 0.5, Z: 0.5}), 1.01, 1.01, 1.01, rl.Color{G: 121, B: 241, A: 127})
 	}
 }

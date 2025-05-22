@@ -21,7 +21,7 @@ func Init() {
 	rl.InitWindow(int32(rl.GetScreenWidth()), int32(rl.GetScreenHeight()), "Raygocraft")
 	rl.ToggleFullscreen()
 	rl.SetTargetFPS(fps)
-	//rl.DisableCursor()
+	rl.DisableCursor()
 
 	loadTextures()
 	world.memoryInit()
@@ -38,6 +38,7 @@ func preDraw() {
 
 func draw3D() {
 	world.renderWorld(RENDER_DISTANCE)
+	drawPlayerTarget()
 }
 
 func draw2D() {
