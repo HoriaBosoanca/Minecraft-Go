@@ -44,6 +44,14 @@ type Position struct {
 	Z int
 }
 
+func positionToVector3(position Position) rl.Vector3 {
+	return rl.Vector3{X: float32(position.X), Y: 0, Z: float32(position.Z)}
+}
+
+func vector3ToPosition(vector3 rl.Vector3) Position {
+	return Position{X: int(vector3.X), Z: int(vector3.Z)}
+}
+
 func worldToChunkPos(worldPos Position) (chunkPos Position) {
 	xChunk := worldPos.X / CHUNK_SIZE
 	if worldPos.X < 0 && worldPos.X%CHUNK_SIZE != 0 {

@@ -21,40 +21,24 @@ func (world *World) colliderInit() {
 	}
 }
 
-func (world *World) getSolidRayHitBlocks(ray rl.Ray) []*Block {
-	collidedBlocks := make([]*Block, 0)
-	for _, chunk := range world.chunks {
+func (world *World) getClosestBlockHit(ray rl.Ray) *Block {
+	var closest *Block = nil
+	for chunkPos, chunk := range world.chunks {
 		rayCol := rl.GetRayCollisionBox(ray, chunk.collider)
-		if rayCol.Hit {
+		if rayCol.Hit && (closest == nil ||
+			rl.Vector3Distance(positionToVector3(chunkPos), positionToVector3(worldToChunkPos(vector3ToPosition(ray.Position)))) <
+				rl.Vector3Distance(positionToVector3(worldToChunkPos(vector3ToPosition(closest.collider.Min))), positionToVector3(worldToChunkPos(vector3ToPosition(ray.Position))))) {
 			for x := range chunk.blocks {
 				for z := range chunk.blocks[x] {
 					for _, block := range chunk.blocks[x][z] {
 						rayCollision := rl.GetRayCollisionBox(ray, block.collider)
-						if rayCollision.Hit && block.data != AirBlock {
-							collidedBlocks = append(collidedBlocks, block)
+						if closest == nil || (rayCollision.Hit && block.data != AirBlock &&
+							rl.Vector3Distance(block.collider.Min, ray.Position) < rl.Vector3Distance(closest.collider.Min, ray.Position)) {
+							closest = block
 						}
 					}
 				}
 			}
-		}
-	}
-	return collidedBlocks
-}
-
-func (world *World) getClosestTargetedBlock() *Block {
-	blocks := world.getSolidRayHitBlocks(rl.GetScreenToWorldRay(rl.Vector2{X: float32(rl.GetScreenWidth()) / 2.0, Y: float32(rl.GetScreenHeight()) / 2.0}, camera3D))
-
-	if len(blocks) == 0 {
-		return nil
-	}
-
-	closest := blocks[0]
-	minDist := rl.Vector3Distance(closest.collider.Min, camera3D.Position)
-	for _, block := range blocks[1:] {
-		dist := rl.Vector3Distance(block.collider.Min, camera3D.Position)
-		if dist < minDist {
-			closest = block
-			minDist = dist
 		}
 	}
 	return closest

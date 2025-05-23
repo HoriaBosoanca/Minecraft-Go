@@ -42,7 +42,8 @@ func draw3D() {
 }
 
 func draw2D() {
+	canvasDrawText("Press F10 to enable cursor and F11 to disable fullscreen", 5.0, 5.0, 20.0, rl.Black)
 	displayCoords(5.0, 20.0)
 	displayFPS(5.0, 50.0)
-	canvasDrawText("Press F10 to enable cursor and F11 to disable fullscreen", 5.0, 5.0, 20.0, rl.Black)
+	displayTarget(5.0, 65.0)
 }
