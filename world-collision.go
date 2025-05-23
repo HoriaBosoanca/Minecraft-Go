@@ -21,13 +21,11 @@ func (world *World) colliderInit() {
 	}
 }
 
-func (world *World) getClosestBlockHit(ray rl.Ray) *Block {
+func (world *World) getClosestBlockHit(ray rl.Ray, maxDistance float32) *Block {
 	var closest *Block = nil
 	for chunkPos, chunk := range world.chunks {
 		rayCol := rl.GetRayCollisionBox(ray, chunk.collider)
-		if rayCol.Hit && (closest == nil ||
-			rl.Vector3Distance(positionToVector3(chunkPos), positionToVector3(worldToChunkPos(vector3ToPosition(ray.Position)))) <
-				rl.Vector3Distance(positionToVector3(worldToChunkPos(vector3ToPosition(closest.collider.Min))), positionToVector3(worldToChunkPos(vector3ToPosition(ray.Position))))) {
+		if rayCol.Hit && rl.Vector3Distance(positionToVector3(chunkPos), positionToVector3(worldToChunkPos(vector3ToPosition(ray.Position)))) < maxDistance {
 			for x := range chunk.blocks {
 				for z := range chunk.blocks[x] {
 					for _, block := range chunk.blocks[x][z] {

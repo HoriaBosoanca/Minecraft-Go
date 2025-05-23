@@ -31,3 +31,7 @@ const (
 	MOVE_SPEED   float32 = 50
 	ASCEND_SPEED float32 = 100
 )
+
+// --> PHYSICS
+
+const MAX_CHUNK_TARGET_SEARCH = 2.0
