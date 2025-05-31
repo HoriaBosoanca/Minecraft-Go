@@ -3,6 +3,7 @@ package main
 import rl "github.com/gen2brain/raylib-go/raylib"
 
 var atlas rl.Texture2D
+var cursor rl.Texture2D
 
 var ( // textures begin at the top left of the atlas
 	BLOCKS_PER_ATLAS_WIDTH = float32(8.0)
@@ -16,6 +17,7 @@ var ( // textures begin at the top left of the atlas
 
 func loadTextures() {
 	atlas = rl.LoadTexture("assets/atlas.png")
+	cursor = rl.LoadTexture("assets/crosshair.png")
 	for i := range cubeTexture {
 		cubeTexture[i] /= BLOCKS_PER_ATLAS_WIDTH
 	}

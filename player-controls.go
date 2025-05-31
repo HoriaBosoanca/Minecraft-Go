@@ -49,6 +49,9 @@ func handleInput() {
 			rl.DisableCursor()
 		}
 	}
+	if rl.IsKeyPressed(rl.KeyF9) {
+		SHOW_PLAYER_TARGET = !SHOW_PLAYER_TARGET
+	}
 
 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 		// break block
@@ -60,4 +63,8 @@ func drawPlayerTarget() {
 	if block != nil {
 		rl.DrawCube(rl.Vector3Add(block.collider.Min, rl.Vector3{X: 0.5, Y: 0.5, Z: 0.5}), 1.01, 1.01, 1.01, rl.Color{G: 121, B: 241, A: 127})
 	}
+}
+
+func drawCrosshair() {
+	rl.DrawTexture(cursor, int32(rl.GetScreenWidth()/2)-cursor.Width/2, int32(rl.GetScreenHeight()/2)-cursor.Height/2, rl.White)
 }

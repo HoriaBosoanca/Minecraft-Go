@@ -24,13 +24,13 @@ func (world *World) colliderInit() {
 func (world *World) getClosestBlockHit(ray rl.Ray, maxDistance float32) *Block {
 	var closest *Block = nil
 	for chunkPos, chunk := range world.chunks {
-		rayCol := rl.GetRayCollisionBox(ray, chunk.collider)
-		if rayCol.Hit && rl.Vector3Distance(positionToVector3(chunkPos), positionToVector3(worldToChunkPos(vector3ToPosition(ray.Position)))) < maxDistance {
+		chunkCol := rl.GetRayCollisionBox(ray, chunk.collider)
+		if chunkCol.Hit && rl.Vector3Distance(positionToVector3(chunkPos), positionToVector3(worldToChunkPos(vector3ToPosition(ray.Position)))) < maxDistance {
 			for x := range chunk.blocks {
 				for z := range chunk.blocks[x] {
 					for _, block := range chunk.blocks[x][z] {
-						rayCollision := rl.GetRayCollisionBox(ray, block.collider)
-						if closest == nil || (rayCollision.Hit && block.data != AirBlock &&
+						blockCol := rl.GetRayCollisionBox(ray, block.collider)
+						if closest == nil || (blockCol.Hit && block.data != AirBlock &&
 							rl.Vector3Distance(block.collider.Min, ray.Position) < rl.Vector3Distance(closest.collider.Min, ray.Position)) {
 							closest = block
 						}

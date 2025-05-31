@@ -38,12 +38,17 @@ func preDraw() {
 
 func draw3D() {
 	world.renderWorld(RENDER_DISTANCE)
-	drawPlayerTarget()
+	if SHOW_PLAYER_TARGET {
+		drawPlayerTarget()
+	}
 }
 
 func draw2D() {
-	canvasDrawText("Press F10 to enable cursor and F11 to disable fullscreen", 5.0, 5.0, 20.0, rl.Black)
+	canvasDrawText("F10 = show cursor, F11 = fullscreen, F9 = show target block", 5.0, 5.0, 20.0, rl.Black)
 	displayCoords(5.0, 20.0)
 	displayFPS(5.0, 50.0)
-	displayTarget(5.0, 65.0)
+	drawCrosshair()
+	if SHOW_PLAYER_TARGET {
+		displayTargetCoordinates(5.0, 65.0)
+	}
 }

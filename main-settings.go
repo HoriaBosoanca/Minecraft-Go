@@ -32,6 +32,10 @@ const (
 	ASCEND_SPEED float32 = 100
 )
 
+var (
+	SHOW_PLAYER_TARGET = true
+)
+
 // --> PHYSICS
 
 const MAX_CHUNK_TARGET_SEARCH = 2.0
