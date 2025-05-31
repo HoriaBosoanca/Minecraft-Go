@@ -19,7 +19,7 @@ func displayFPS(posX, posY float64) {
 }
 
 func displayTargetCoordinates(posX, posY float64) {
-	block := world.getClosestBlockHit(rl.GetScreenToWorldRay(rl.Vector2{X: float32(rl.GetScreenWidth()) / 2.0, Y: float32(rl.GetScreenHeight()) / 2.0}, camera3D), MAX_CHUNK_TARGET_SEARCH)
+	block, _ := world.getClosestBlockHit(getPlayerRay(), MAX_CONTINUOUS_CHUNK_TARGET_SEARCH)
 	if block != nil {
 		canvasDrawText(fmt.Sprintf("Target:\nX: %d, Y: %d, Z: %d", int(block.collider.Min.X), int(block.collider.Min.Y), int(block.collider.Min.Z)), posX, posY, 20.0, rl.Black)
 	} else {

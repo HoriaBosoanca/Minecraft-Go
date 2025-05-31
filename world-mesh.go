@@ -20,12 +20,12 @@ type ChunkMesh struct {
 
 func (world *World) generateMeshes() {
 	for worldPos, chunk := range world.chunks {
-		chunk.generateChunkMesh(Position{X: worldPos.X, Z: worldPos.Z}, world)
+		chunk.generateChunkMesh(Position{X: worldPos.X, Z: worldPos.Z})
 	}
 }
 
-// the world is taken as a parameter for some much-needed optimizations, but can be removed
-func (chunk *Chunk) generateChunkMesh(chunkPos Position, world *World) {
+// this uses world for some much-needed optimizations, but can be removed
+func (chunk *Chunk) generateChunkMesh(chunkPos Position) {
 	chunk.mesh = &ChunkMesh{}
 	for x := range chunk.blocks {
 		for z := range chunk.blocks[x] {

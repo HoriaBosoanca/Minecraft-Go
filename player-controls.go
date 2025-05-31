@@ -54,12 +54,16 @@ func handleInput() {
 	}
 
 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-		// break block
+		block, chunk := world.getClosestBlockHit(getPlayerRay(), MAX_TRIGGERED_CHUNK_TARGET_SEARCH)
+		if block != nil && chunk != nil {
+			block.data = AirBlock
+			chunk.generateChunkMesh(worldToChunkPos(vector3ToPosition(block.collider.Min)))
+		}
 	}
 }
 
 func drawPlayerTarget() {
-	block := world.getClosestBlockHit(rl.GetScreenToWorldRay(rl.Vector2{X: float32(rl.GetScreenWidth()) / 2.0, Y: float32(rl.GetScreenHeight()) / 2.0}, camera3D), MAX_CHUNK_TARGET_SEARCH)
+	block, _ := world.getClosestBlockHit(getPlayerRay(), MAX_CONTINUOUS_CHUNK_TARGET_SEARCH)
 	if block != nil {
 		rl.DrawCube(rl.Vector3Add(block.collider.Min, rl.Vector3{X: 0.5, Y: 0.5, Z: 0.5}), 1.01, 1.01, 1.01, rl.Color{G: 121, B: 241, A: 127})
 	}
@@ -67,4 +71,8 @@ func drawPlayerTarget() {
 
 func drawCrosshair() {
 	rl.DrawTexture(cursor, int32(rl.GetScreenWidth()/2)-cursor.Width/2, int32(rl.GetScreenHeight()/2)-cursor.Height/2, rl.White)
+}
+
+func getPlayerRay() rl.Ray {
+	return rl.GetScreenToWorldRay(rl.Vector2{X: float32(rl.GetScreenWidth()) / 2.0, Y: float32(rl.GetScreenHeight()) / 2.0}, camera3D)
 }
