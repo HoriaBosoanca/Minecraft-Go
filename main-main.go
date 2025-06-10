@@ -47,8 +47,9 @@ func draw2D() {
 	canvasDrawText("F10 = show cursor, F11 = fullscreen, F9 = show target block", 5.0, 5.0, 20.0, rl.Black)
 	displayCoords(5.0, 20.0)
 	displayFPS(5.0, 50.0)
+	displayMemUsage(5.0, 65.0)
 	drawCrosshair()
 	if SHOW_PLAYER_TARGET {
-		displayTargetCoordinates(5.0, 65.0)
+		displayTargetCoordinates(5.0, 80.0)
 	}
 }

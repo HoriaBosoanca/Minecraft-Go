@@ -4,6 +4,7 @@ import (
 	"fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
 	"image/color"
+	"runtime"
 )
 
 func displayCoords(posX, posY float64) {
@@ -16,6 +17,12 @@ func displayCoords(posX, posY float64) {
 
 func displayFPS(posX, posY float64) {
 	canvasDrawText(fmt.Sprintf("FPS: %d", rl.GetFPS()), posX, posY, 20.0, rl.Black)
+}
+
+func displayMemUsage(posX, posY float64) {
+	var mem runtime.MemStats
+	runtime.ReadMemStats(&mem)
+	canvasDrawText(fmt.Sprintf("Memory: %d MB", mem.Alloc/1024/1024), posX, posY, 20.0, rl.Black)
 }
 
 func displayTargetCoordinates(posX, posY float64) {
