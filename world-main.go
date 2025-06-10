@@ -9,6 +9,7 @@ type World struct {
 }
 
 type Chunk struct {
+	position Position
 	blocks   [][][]*Block // x z y
 	collider rl.BoundingBox
 	mesh     *ChunkMesh
@@ -25,6 +26,7 @@ func (world *World) memoryInit() {
 		for zChunk := -WORLD_SIZE; zChunk <= WORLD_SIZE; zChunk++ {
 			chunk := &Chunk{}
 			world.chunks[Position{xChunk, zChunk}] = chunk
+			chunk.position = Position{xChunk, zChunk}
 			chunk.blocks = make([][][]*Block, CHUNK_SIZE)
 			for x := 0; x < CHUNK_SIZE; x++ {
 				chunk.blocks[x] = make([][]*Block, CHUNK_SIZE)
@@ -42,6 +44,12 @@ func (world *World) memoryInit() {
 type Position struct {
 	X int
 	Z int
+}
+
+type Position3 struct {
+	X int
+	Z int
+	Y int
 }
 
 func positionToVector3(position Position) rl.Vector3 {

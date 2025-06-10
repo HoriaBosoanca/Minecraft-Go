@@ -1,20 +1,28 @@
 package main
 
 import (
-	"fmt"
 	"github.com/ojrac/opensimplex-go"
+	"math/rand"
 	"time"
 )
 
-var noise = opensimplex.New(time.Now().Unix())
+var seed = rand.New(rand.NewSource(time.Now().Unix()))
+var terrainNoise = opensimplex.New(seed.Int63())
+var treeNoise = opensimplex.New(seed.Int63())
 
-const craziness = 0.03
+const (
+	terrainCraziness = 0.03
+	treeCraziness    = 0.5
+	treeAmount       = 0.1 // 0 to 1
+)
 
 const (
 	AirBlock int8 = iota
 	GrassBlock
 	DirtBlock
 	StoneBlock
+	OakLeafBlock
+	OakLogBlock
 )
 
 func (world *World) generateBlocks() {
@@ -24,23 +32,50 @@ func (world *World) generateBlocks() {
 }
 
 func (chunk *Chunk) generateBlockData(chunkPos Position) {
+	chunk.generateTerrain(chunkPos)
+	chunk.addTrees(chunkPos)
+}
+
+func (chunk *Chunk) addBlock(block int8, chunkPos Position3) {
+	if chunkPos.X >= 0 && chunkPos.X < CHUNK_SIZE && chunkPos.Z >= 0 && chunkPos.Z < CHUNK_SIZE && chunkPos.Y >= 0 && chunkPos.Y < CHUNK_HEIGHT {
+		chunk.blocks[chunkPos.X][chunkPos.Z][chunkPos.Y].data = block
+	}
+}
+
+func getGroundLevel(worldPos Position) (groundHeight int) {
+	return int((terrainNoise.Eval2(float64(worldPos.X)*terrainCraziness, float64(worldPos.Z)*terrainCraziness) + 1) / 2 * CHUNK_HEIGHT)
+}
+
+func positionHasTree(worldPos Position) bool {
+	return (treeNoise.Eval2(float64(worldPos.X)*treeCraziness, float64(worldPos.Z)*treeCraziness)+1)/2 < treeAmount
+}
+
+func (chunk *Chunk) generateTerrain(chunkPos Position) {
+	for x := range chunk.blocks {
+		for z := range chunk.blocks[x] {
+			ground := getGroundLevel(chunkAndLocalToWorldPos(chunkPos, Position{X: x, Z: z}))
+			for y := range chunk.blocks[x][z] {
+				if y == ground {
+					chunk.addBlock(GrassBlock, Position3{X: x, Y: y, Z: z})
+				} else if y < ground && y >= ground-5 {
+					chunk.addBlock(DirtBlock, Position3{X: x, Y: y, Z: z})
+				} else if y < ground {
+					chunk.addBlock(StoneBlock, Position3{X: x, Y: y, Z: z})
+				} else {
+					chunk.addBlock(AirBlock, Position3{X: x, Y: y, Z: z})
+				}
+			}
+		}
+	}
+}
+
+func (chunk *Chunk) addTrees(chunkPos Position) {
 	for x := range chunk.blocks {
 		for z := range chunk.blocks[x] {
 			worldPos := chunkAndLocalToWorldPos(chunkPos, Position{X: x, Z: z})
-			ground := (noise.Eval2(float64(worldPos.X)*craziness, float64(worldPos.Z)*craziness) + 1) / 2 * CHUNK_HEIGHT
-			if ground < 3 {
-				fmt.Println("this only prints for larger chunk sizes somehow")
-			}
-			for y := 0; y < CHUNK_HEIGHT; y++ {
-				if y == int(ground) {
-					chunk.blocks[x][z][y].data = GrassBlock
-				} else if y < int(ground) && y >= int(ground-5) {
-					chunk.blocks[x][z][y].data = DirtBlock
-				} else if y < int(ground) {
-					chunk.blocks[x][z][y].data = StoneBlock
-				} else {
-					chunk.blocks[x][z][y].data = AirBlock
-				}
+			ground := getGroundLevel(worldPos)
+			if positionHasTree(worldPos) && ground+5 < CHUNK_HEIGHT {
+				chunk.addStructure(tree, Position3{X: x, Y: ground, Z: z})
 			}
 		}
 	}
