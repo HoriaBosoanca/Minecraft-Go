@@ -54,18 +54,18 @@ func handleInput() {
 	}
 
 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
-		block, chunk := world.getClosestBlockHit(getPlayerRay(), MAX_TRIGGERED_CHUNK_TARGET_SEARCH)
+		block, blockPos, chunk := world.getClosestBlockHit(getPlayerRay(), MAX_TRIGGERED_CHUNK_TARGET_SEARCH)
 		if block != nil && chunk != nil {
 			block.data = AirBlock
-			chunk.generateChunkMesh(worldToChunkPos(vector3ToPosition(block.collider.Min)))
+			chunk.generateChunkMesh(worldToChunkPos(vector3ToPosition(position3ToVector3(*blockPos))))
 		}
 	}
 }
 
 func drawPlayerTarget() {
-	block, _ := world.getClosestBlockHit(getPlayerRay(), MAX_CONTINUOUS_CHUNK_TARGET_SEARCH)
-	if block != nil {
-		rl.DrawCube(rl.Vector3Add(block.collider.Min, rl.Vector3{X: 0.5, Y: 0.5, Z: 0.5}), 1.01, 1.01, 1.01, rl.Color{G: 121, B: 241, A: 127})
+	block, blockPos, _ := world.getClosestBlockHit(getPlayerRay(), MAX_CONTINUOUS_CHUNK_TARGET_SEARCH)
+	if block != nil && blockPos != nil {
+		rl.DrawCube(rl.Vector3Add(position3ToVector3(*blockPos), rl.Vector3{X: 0.5, Y: 0.5, Z: 0.5}), 1.01, 1.01, 1.01, rl.Color{G: 121, B: 241, A: 127})
 	}
 }
 

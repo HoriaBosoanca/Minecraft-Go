@@ -33,7 +33,8 @@ const (
 )
 
 var (
-	SHOW_PLAYER_TARGET = true
+	// TODO: figure out why tf staring at a block increases memory usage from 700MB to 1300MB and loops around (has something to do with colliders)
+	SHOW_PLAYER_TARGET = false
 )
 
 // --> PHYSICS

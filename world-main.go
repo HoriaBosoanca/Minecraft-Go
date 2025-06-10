@@ -16,8 +16,7 @@ type Chunk struct {
 }
 
 type Block struct {
-	data     int8
-	collider rl.BoundingBox
+	data int8
 }
 
 func (world *World) memoryInit() {
@@ -50,6 +49,10 @@ type Position3 struct {
 	X int
 	Z int
 	Y int
+}
+
+func position3ToVector3(position Position3) rl.Vector3 {
+	return rl.Vector3{X: float32(position.X), Y: float32(position.Y), Z: float32(position.Z)}
 }
 
 func positionToVector3(position Position) rl.Vector3 {
