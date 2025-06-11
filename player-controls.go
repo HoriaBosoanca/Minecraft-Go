@@ -55,9 +55,9 @@ func handleInput() {
 
 	if rl.IsMouseButtonPressed(rl.MouseButtonLeft) {
 		block, blockPos, chunk := world.getClosestBlockHit(getPlayerRay(), MAX_TRIGGERED_CHUNK_TARGET_SEARCH)
-		if block != nil && chunk != nil {
-			block.data = AirBlock
-			chunk.generateChunkMesh(worldToChunkPos(vector3ToPosition(position3ToVector3(*blockPos))))
+		if block != nil && chunk != nil && blockPos != nil {
+			chunk.addBlock(AirBlock, worldPos3ToLocalPos3(*blockPos))
+			chunk.generateChunkMesh()
 		}
 	}
 }

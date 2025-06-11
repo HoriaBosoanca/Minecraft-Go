@@ -4,8 +4,8 @@ import rl "github.com/gen2brain/raylib-go/raylib"
 
 func (world *World) renderWorld(renderDistance int) {
 	for chunkPos, chunk := range world.chunks {
-		cameraWorldPos := Position{X: int(camera3D.Position.X), Z: int(camera3D.Position.Z)}
-		cameraChunkPos := worldToChunkPos(cameraWorldPos)
+		cameraWorldPos := Position2{X: int(camera3D.Position.X), Z: int(camera3D.Position.Z)}
+		cameraChunkPos := worldPos2ToChunkPos2(cameraWorldPos)
 		if chunkPos.X-cameraChunkPos.X <= renderDistance &&
 			chunkPos.X-cameraChunkPos.X >= -renderDistance &&
 			chunkPos.Z-cameraChunkPos.Z <= renderDistance &&

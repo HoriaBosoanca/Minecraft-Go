@@ -31,7 +31,7 @@ func (world *World) generateBlocks() {
 	}
 }
 
-func (chunk *Chunk) generateBlockData(chunkPos Position) {
+func (chunk *Chunk) generateBlockData(chunkPos Position2) {
 	chunk.generateTerrain(chunkPos)
 	chunk.addTrees(chunkPos)
 }
@@ -42,18 +42,18 @@ func (chunk *Chunk) addBlock(block int8, chunkPos Position3) {
 	}
 }
 
-func getGroundLevel(worldPos Position) (groundHeight int) {
+func getGroundLevel(worldPos Position2) (groundHeight int) {
 	return int((terrainNoise.Eval2(float64(worldPos.X)*terrainCraziness, float64(worldPos.Z)*terrainCraziness) + 1) / 2 * CHUNK_HEIGHT)
 }
 
-func positionHasTree(worldPos Position) bool {
+func positionHasTree(worldPos Position2) bool {
 	return (treeNoise.Eval2(float64(worldPos.X)*treeCraziness, float64(worldPos.Z)*treeCraziness)+1)/2 < treeAmount
 }
 
-func (chunk *Chunk) generateTerrain(chunkPos Position) {
+func (chunk *Chunk) generateTerrain(chunkPos Position2) {
 	for x := range chunk.blocks {
 		for z := range chunk.blocks[x] {
-			ground := getGroundLevel(chunkAndLocalToWorldPos(chunkPos, Position{X: x, Z: z}))
+			ground := getGroundLevel(chunkPos2AndLocalPos2ToWorldPos2(chunkPos, Position2{X: x, Z: z}))
 			for y := range chunk.blocks[x][z] {
 				if y == ground {
 					chunk.addBlock(GrassBlock, Position3{X: x, Y: y, Z: z})
@@ -69,10 +69,10 @@ func (chunk *Chunk) generateTerrain(chunkPos Position) {
 	}
 }
 
-func (chunk *Chunk) addTrees(chunkPos Position) {
+func (chunk *Chunk) addTrees(chunkPos Position2) {
 	for x := range chunk.blocks {
 		for z := range chunk.blocks[x] {
-			worldPos := chunkAndLocalToWorldPos(chunkPos, Position{X: x, Z: z})
+			worldPos := chunkPos2AndLocalPos2ToWorldPos2(chunkPos, Position2{X: x, Z: z})
 			ground := getGroundLevel(worldPos)
 			if positionHasTree(worldPos) && ground+5 < CHUNK_HEIGHT {
 				chunk.addStructure(tree, Position3{X: x, Y: ground, Z: z})

@@ -9,9 +9,9 @@ import (
 
 func displayCoords(posX, posY float64) {
 	camPos := camera3D.Position
-	camWorldPos := Position{X: int(camPos.X), Z: int(camPos.Z)}
+	camWorldPos := Position2{X: int(camPos.X), Z: int(camPos.Z)}
 	canvasDrawText(fmt.Sprintf("Coordinates:\nX: %d, Y: %d, Z: %d", camWorldPos.X, int(camPos.Y), camWorldPos.Z), posX, posY, 20.0, rl.Black)
-	chunkPos := worldToChunkPos(camWorldPos)
+	chunkPos := worldPos2ToChunkPos2(camWorldPos)
 	canvasDrawText(fmt.Sprintf("Chunk positions:\nX: %d, Z: %d", chunkPos.X, chunkPos.Z), posX, posY+15.0, 20.0, rl.Black)
 }
 

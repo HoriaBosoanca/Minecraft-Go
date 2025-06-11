@@ -19,18 +19,18 @@ type ChunkMesh struct {
 }
 
 func (world *World) generateMeshes() {
-	for worldPos, chunk := range world.chunks {
-		chunk.generateChunkMesh(Position{X: worldPos.X, Z: worldPos.Z})
+	for _, chunk := range world.chunks {
+		chunk.generateChunkMesh()
 	}
 }
 
 // this uses world for some much-needed optimizations, but can be removed
-func (chunk *Chunk) generateChunkMesh(chunkPos Position) {
+func (chunk *Chunk) generateChunkMesh() {
 	chunk.mesh = &ChunkMesh{}
 	for x := range chunk.blocks {
 		for z := range chunk.blocks[x] {
 			for y, block := range chunk.blocks[x][z] {
-				worldPos := chunkAndLocalToWorldPos(chunkPos, Position{X: x, Z: z})
+				worldPos := chunkPos2AndLocalPos2ToWorldPos2(chunk.position, Position2{X: x, Z: z})
 				if block.data == AirBlock || world.isBlockSurrounded(worldPos.X, y, worldPos.Z) {
 					continue
 				}
