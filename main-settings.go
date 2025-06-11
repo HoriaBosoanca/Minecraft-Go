@@ -21,7 +21,7 @@ var camera3D = rl.Camera{
 const (
 	CHUNK_SIZE      = 16
 	CHUNK_HEIGHT    = 32
-	WORLD_SIZE      = 16 // actual number of chunks is (2*WORLD_SIZE+1)^2
+	WORLD_SIZE      = 16 // the actual number of chunks is (2*WORLD_SIZE+1)^2
 	RENDER_DISTANCE = 32 // the number of chunks loaded is (2*RENDER_DISTANCE+1)^2
 )
 
@@ -33,8 +33,7 @@ const (
 )
 
 var (
-	// TODO: figure out why tf staring at a block increases memory usage from 700MB to 1300MB and loops around (has something to do with colliders)
-	SHOW_PLAYER_TARGET = false
+	SHOW_PLAYER_TARGET = true
 )
 
 // --> PHYSICS

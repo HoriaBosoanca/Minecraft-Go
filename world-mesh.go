@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -102,6 +103,11 @@ func (chunkMesh *ChunkMesh) addBlock(position rl.Vector3, block int8) {
 }
 
 func (chunkMesh *ChunkMesh) buildChunkMesh() {
+	if !chunkMesh.Initialized {
+		fmt.Println("ChunkMesh not initialized")
+		return
+	}
+
 	var mesh rl.Mesh
 	mesh.VertexCount = chunkMesh.VertexCount
 	mesh.Vertices = &chunkMesh.Vertices[0]

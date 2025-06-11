@@ -1,6 +1,9 @@
 package main
 
-import rl "github.com/gen2brain/raylib-go/raylib"
+import (
+	rl "github.com/gen2brain/raylib-go/raylib"
+	"runtime/debug"
+)
 
 var world = &World{}
 
@@ -18,6 +21,7 @@ func main() {
 }
 
 func Init() {
+	debug.SetGCPercent(20)
 	rl.InitWindow(int32(rl.GetScreenWidth()), int32(rl.GetScreenHeight()), "Raygocraft")
 	rl.ToggleFullscreen()
 	rl.SetTargetFPS(fps)

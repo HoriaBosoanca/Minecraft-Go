@@ -114,22 +114,12 @@ func (world *World) worldGetBlock(x, y, z int) int8 {
 }
 
 func (world *World) isBlockSurrounded(x, y, z int) bool {
-	if world.worldGetBlock(x-1, y, z) == AirBlock {
-		return false
-	}
-	if world.worldGetBlock(x+1, y, z) == AirBlock {
-		return false
-	}
-	if world.worldGetBlock(x, y-1, z) == AirBlock {
-		return false
-	}
-	if world.worldGetBlock(x, y+1, z) == AirBlock {
-		return false
-	}
-	if world.worldGetBlock(x, y, z-1) == AirBlock {
-		return false
-	}
-	if world.worldGetBlock(x, y, z+1) == AirBlock {
+	if world.worldGetBlock(x-1, y, z) == AirBlock ||
+		world.worldGetBlock(x+1, y, z) == AirBlock ||
+		world.worldGetBlock(x, y-1, z) == AirBlock ||
+		world.worldGetBlock(x, y+1, z) == AirBlock ||
+		world.worldGetBlock(x, y, z-1) == AirBlock ||
+		world.worldGetBlock(x, y, z+1) == AirBlock {
 		return false
 	}
 	return true
