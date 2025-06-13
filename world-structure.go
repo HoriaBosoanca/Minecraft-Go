@@ -8,7 +8,7 @@ var (
 	tree = Structure{
 		blocks: [][][]int8{
 			{
-				{OakLogBlock, OakLogBlock, OakLogBlock},
+				{OakLogBlock, OakLogBlock, OakLogBlock, OakLogBlock, OakLogBlock, OakLeafBlock},
 			},
 		},
 	}

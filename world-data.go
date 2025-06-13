@@ -12,6 +12,7 @@ var treeNoise = opensimplex.New(seed.Int63())
 
 const (
 	terrainCraziness = 0.03
+	waterLevel       = 9
 	treeCraziness    = 0.5
 	treeAmount       = 0.1 // 0 to 1
 )
@@ -23,6 +24,7 @@ const (
 	StoneBlock
 	OakLeafBlock
 	OakLogBlock
+	WaterBlock
 )
 
 func (world *World) generateBlocks() {
@@ -33,7 +35,8 @@ func (world *World) generateBlocks() {
 
 func (chunk *Chunk) generateBlockData(chunkPos Position2) {
 	chunk.generateTerrain(chunkPos)
-	chunk.addTrees(chunkPos)
+	chunk.addWater()
+	//chunk.addTrees(chunkPos)
 }
 
 func (chunk *Chunk) addBlock(block int8, chunkPos Position3) {
@@ -69,12 +72,24 @@ func (chunk *Chunk) generateTerrain(chunkPos Position2) {
 	}
 }
 
+func (chunk *Chunk) addWater() {
+	for x := range chunk.blocks {
+		for z := range chunk.blocks[x] {
+			for y := range chunk.blocks[x][z] {
+				if y < waterLevel && chunk.blocks[x][z][y].data == AirBlock {
+					chunk.addBlock(WaterBlock, Position3{X: x, Y: y, Z: z})
+				}
+			}
+		}
+	}
+}
+
 func (chunk *Chunk) addTrees(chunkPos Position2) {
 	for x := range chunk.blocks {
 		for z := range chunk.blocks[x] {
 			worldPos := chunkPos2AndLocalPos2ToWorldPos2(chunkPos, Position2{X: x, Z: z})
 			ground := getGroundLevel(worldPos)
-			if positionHasTree(worldPos) && ground+5 < CHUNK_HEIGHT {
+			if positionHasTree(worldPos) {
 				chunk.addStructure(tree, Position3{X: x, Y: ground, Z: z})
 			}
 		}

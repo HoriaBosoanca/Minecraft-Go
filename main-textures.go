@@ -16,6 +16,7 @@ var ( // textures begin at the top left of the atlas
 	OAK_LOG_SIDE = rl.Vector2{X: ATLAS_UNIT * 6.0, Y: ATLAS_UNIT * 6.0}
 	OAK_LOG_TOP  = rl.Vector2{X: ATLAS_UNIT * 6.0, Y: ATLAS_UNIT * 7.0}
 	OAK_LEAF     = rl.Vector2{X: ATLAS_UNIT * 7.0, Y: ATLAS_UNIT * 6.0}
+	WATER        = rl.Vector2{X: ATLAS_UNIT * 1.0, Y: ATLAS_UNIT * 6.0}
 )
 
 func loadTextures() {
@@ -65,6 +66,14 @@ func loadTextures() {
 			OAK_LEAF,
 			OAK_LEAF,
 			OAK_LEAF,
+		},
+		WaterBlock: {
+			WATER,
+			WATER,
+			WATER,
+			WATER,
+			WATER,
+			WATER,
 		},
 	}
 }
