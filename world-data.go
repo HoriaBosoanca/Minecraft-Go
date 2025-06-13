@@ -35,7 +35,7 @@ func (world *World) generateBlocks() {
 
 func (chunk *Chunk) generateBlockData(chunkPos Position2) {
 	chunk.generateTerrain(chunkPos)
-	chunk.addWater()
+	//chunk.addWater()
 	//chunk.addTrees(chunkPos)
 }
 
